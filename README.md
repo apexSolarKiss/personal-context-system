@@ -78,7 +78,9 @@ The setup prompt is built to keep that line structural, not just a good intentio
 
 This scaffold is published by **apex solar kiss** — <https://github.com/apexSolarKiss/personal-context-system>. The name is a generic literal — it names the artifact class, legible on sight; apex solar kiss / ASK origin is carried by the `apexSolarKiss/` owner namespace and the ADR provenance frontmatter, not by the repo name. The repo carries the *method*; your generated system carries your *content* and links back here only by provenance, not by name.
 
-Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, `template-version`, `generated`) so a future tool — or future you — can trace where the architecture came from.
+Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, `template-version`, `template-commit`, `generated`) so a future tool — or future you — can trace where the architecture came from.
+
+**This release:** `v0.1.0` — initial commit `4c004ff`.
 
 ---
 
