@@ -1,0 +1,7 @@
+# OS cruft
+.DS_Store
+
+# This repo is the public scaffold only. Private context systems generated from it
+# must live in a SEPARATE folder, never inside a clone of this repo. As a backstop,
+# ignore anything that looks like a generated private system left here by mistake.
+personal-*/
