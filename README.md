@@ -1,5 +1,7 @@
 # personal-context-system
 
+![personal-context-system banner](personal-context-system-banner.jpeg)
+
 **`personal-context-system` is the public, ASK-origin scaffold for building a tool-agnostic, durable personal context system. It does NOT contain anyone's private personal context.**
 
 When you run the setup prompt, the generated system is written into your own private local folder — by default `personal-<YOUR-INITIALS>`, or any name you choose — separate from this scaffold. **Never commit your private context back to this repo.**
