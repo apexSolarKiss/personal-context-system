@@ -100,10 +100,8 @@ This scaffold is published by **apex solar kiss** — <https://github.com/apexSo
 
 Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, `template-version`, `template-commit`, `generated`) so a future tool — or future you — can trace where the architecture came from.
 
-<!-- MAINTAINER TODO: update this line after cutting the post-redesign release tag.
-     Set the version and commit to the tag that actually contains the redesigned
-     SETUP-PROMPT.md + BOOTSTRAP-PROMPT.md. Do not invent a tag here. -->
-**This release:** _placeholder — maintainer to fill version + commit after cutting the post-redesign tag._
+<!-- maintainer: on merge, cut tag `v0.2.0` on the merge commit so the bootstrap URL resolves. -->
+**This release:** `v0.2.0` — the self-contained setup flow (one-file `SETUP-PROMPT.md` + `BOOTSTRAP-PROMPT.md`). The `v0.2.0` tag is cut on this release's merge commit, and the bootstrap pins to it.
 
 ---
 
