@@ -53,7 +53,7 @@ This repo and the system you build from it are two different things, and they li
 | **Where it lives** | A clone of this repo, or the single `SETUP-PROMPT.md` file — installer source, disposable, updatable. | A **separate** place you own: a local folder (e.g. `~/Context/personal-<initials>`) for filesystem tools, or wherever you save the generated files for chat-only tools. |
 | **Commit to this repo?** | Yes — it's public source. | **Never.** It is private and lives outside this repo. |
 
-For filesystem agents, the clone is the installer and your context goes somewhere else — the setup prompt asks for two paths and refuses to write your private content into the scaffold clone. For chat-only tools there is no clone at all: you just pick a private system name/folder label and a place to save the generated files.
+For filesystem agents, any scaffold clone is installer source, not the private destination. If the setup flow uses a clone, it asks for a separate private path and refuses to write private content into the scaffold clone. If no clone is used, the self-contained setup prompt is still enough. For chat-only tools there is no clone at all: you just pick a private system name/folder label and a place to save the generated files.
 
 ---
 
