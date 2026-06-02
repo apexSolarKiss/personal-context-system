@@ -29,12 +29,14 @@ Assume **anything you put in these files may be surfaced by an AI tool you uploa
 
 ## Where things live (read this first)
 
-Two **separate** locations — keep them apart:
+Two roles to keep separate:
 
-- **The public scaffold** — a clone/fetch of `apexSolarKiss/personal-context-system`. This is *installer source* only: disposable and updatable. Example: `~/Projects/personal-context-system-scaffold`.
-- **Your private context system** — a *separate* folder you own. Example: `~/Context/{{SYSTEM_NAME}}`. Default name `personal-<YOUR-INITIALS>` (e.g. `personal-JD`); override to anything you like (`personal-context`, `my-context`). It is **not** called `personal-context-system` unless you choose that — `personal-context-system` is the public scaffold, not your private system.
+- **The public scaffold / setup source** — either the self-contained `SETUP-PROMPT.md`, a fetched bootstrap URL, or a local clone of `apexSolarKiss/personal-context-system`. Installer source only: disposable, updatable, public.
+- **Your private context system** — a *separate* folder or saved-file location you own. Example: `~/Context/{{SYSTEM_NAME}}`. Default name `personal-<YOUR-INITIALS>` (e.g. `personal-JD`); override to anything you like (`personal-context`, `my-context`). It is **not** called `personal-context-system` unless you choose that — that's the public scaffold, not your private system.
 
-**Never fill private context inside the scaffold clone, and never commit private content back to the public repo.** Setup writes your generated system into your private folder, not into the clone. This avoids the obvious failure mode: accidentally committing your private life-context into a Git repo.
+If you use a filesystem-capable tool, setup may write your generated files directly into your private folder. If you use a chat-only tool, the AI generates the files and you save them there yourself.
+
+**Never fill private context inside a scaffold clone, and never commit private content back to the public repo.** This avoids the obvious failure mode: accidentally committing your private life-context into a Git repo.
 
 ## One-time setup
 
