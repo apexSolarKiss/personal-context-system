@@ -106,7 +106,7 @@ This scaffold is published by **apex solar kiss** — <https://github.com/apexSo
 
 Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, `template-version`, `template-commit`, `generated`) so a future tool — or future you — can trace where the architecture came from.
 
-For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall) by Andrew S Klug // ASK.
+For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
 **This release:** `v0.3.1` — language + UX-precision patch over v0.3.0: README diction elevated to a clean product surface, attach/upload made the universal first path (paste as fallback), the URL path routed through `BOOTSTRAP-PROMPT.md`, and the system / architecture / scaffold distinction made explicit. The `v0.3.1` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
 
