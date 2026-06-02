@@ -13,7 +13,8 @@
 ```
 At the start of every conversation in this project, read _BOOTSTRAP.md
 from the project files first, and follow the read order and rules it
-specifies. The project files are the source of truth. Apply the voice +
+specifies — including its maintenance mode when you want to update your
+context. The project files are the source of truth. Apply the voice +
 style conventions described in identity-and-voice.md.
 ```
 
