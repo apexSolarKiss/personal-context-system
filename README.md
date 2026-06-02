@@ -4,13 +4,13 @@
 
 **`personal-context-system` is the public, ASK-origin scaffold for building a tool-agnostic, durable personal context system. It does NOT contain anyone's private personal context.**
 
-When you run the setup prompt, the generated system is written into your own private local folder — by default `personal-<YOUR-INITIALS>`, or any name you choose — separate from this scaffold. **Never commit your private context back to this repo.**
+When you give the setup prompt to your AI tool, your generated context system lands in a private folder you own — by default `personal-<YOUR-INITIALS>`, or any name you choose — separate from this scaffold. **Never commit your private context back to this repo.**
 
 ---
 
-## Start here: run the setup prompt
+## Start here: give the setup prompt to your tool
 
-You don't fetch this whole repo to use the system. You run **one self-contained file** — [`SETUP-PROMPT.md`](SETUP-PROMPT.md) — and it does the rest: it interviews you, then generates your private context files. The prompt carries every template it needs inline (in its Template Appendix), so it works even in a tool that can't browse a repo.
+The whole user move, for every tool, is one thing: **give the setup prompt to your AI tool, and it takes over** — interview, generate, install-guidance. You don't fetch this repo, and you don't run anything yourself. You hand over **one self-contained file** — [`SETUP-PROMPT.md`](SETUP-PROMPT.md) — and it does the rest: it interviews you, then generates your private context files. The prompt carries every template it needs inline (in its Template Appendix), so it works even in a tool that can't browse a repo.
 
 **Best universal path (works in almost any AI tool):**
 
@@ -20,21 +20,23 @@ You don't fetch this whole repo to use the system. You run **one self-contained 
 
 **If your tool can fetch URLs:** instead of pasting, paste the raw pinned `SETUP-PROMPT.md` URL and let the tool fetch it. (The pinned URL lives in [`BOOTSTRAP-PROMPT.md`](BOOTSTRAP-PROMPT.md) — a tiny hand-deliverable you can text to someone.)
 
-**If your tool is filesystem-capable (Claude Code, Codex):** clone this repo and run `SETUP-PROMPT.md` from the clone. It writes your generated files directly to disk.
+**If your tool is filesystem-capable (Claude Code, Codex):** start a session in a safe workspace folder and give it the prompt (paste `BOOTSTRAP-PROMPT.md` or `SETUP-PROMPT.md`). It detects your folder, clones the scaffold only if it's actually needed, and writes your generated files directly to disk — you don't have to know how to clone.
 
 > The supported floor is **paste or upload of the one self-contained `SETUP-PROMPT.md` file.** Everything else (URL fetch, repo clone) is a convenience on top of that floor — not a requirement.
 
 ---
 
-## Which path fits your tool
+## What each tool does with it
 
-| Your tool | Do this | Why |
+Same one move everywhere — give the tool the setup prompt. What differs is only *how* you hand it over and what the prompt can do once it has it:
+
+| Tool | User action | What the prompt does |
 |---|---|---|
-| **ChatGPT** (chat-only) | **Upload or paste** the self-contained `SETUP-PROMPT.md`. | Reliable floor — needs no URL fetching and no repo traversal. In standard ChatGPT setup, do not depend on URL fetching, repo traversal, or a GitHub connector; paste/upload is the supported floor. |
-| **Claude.ai / Grok** | Paste the **raw pinned `SETUP-PROMPT.md` URL**; fall back to upload/paste if the fetch doesn't land. | These can usually fetch a raw URL, but upload/paste always works as the fallback. |
-| **Claude Code / Codex** (filesystem-capable) | **Clone the repo**, run `SETUP-PROMPT.md`. | The agent reads the local templates and **writes your files directly** into your private folder. |
+| **ChatGPT** / chat-only | Upload or paste the full `SETUP-PROMPT.md` | Interviews you, generates your files one at a time or as downloads |
+| **Claude.ai / Grok** | Paste `BOOTSTRAP-PROMPT.md`, or paste/upload `SETUP-PROMPT.md` | Fetches the pinned setup prompt if URL access works; otherwise asks for upload/paste |
+| **Claude Code / Codex** | Start a session in a safe workspace folder and paste `BOOTSTRAP-PROMPT.md` or `SETUP-PROMPT.md` | Detects your working folder, optionally clones the scaffold, keeps the scaffold and your private folder separate, writes files to disk |
 
-The one file is enough on its own. The URL and the clone are conveniences layered on top — not prerequisites.
+In standard ChatGPT setup, don't depend on URL fetching, repo traversal, or a GitHub connector — paste/upload is the supported floor. The URL and the clone are conveniences layered on top, never prerequisites.
 
 ---
 
@@ -100,8 +102,8 @@ This scaffold is published by **apex solar kiss** — <https://github.com/apexSo
 
 Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, `template-version`, `template-commit`, `generated`) so a future tool — or future you — can trace where the architecture came from.
 
-<!-- maintainer: on merge, cut tag `v0.2.0` on the merge commit so the bootstrap URL resolves. -->
-**This release:** `v0.2.0` — the self-contained setup flow (one-file `SETUP-PROMPT.md` + `BOOTSTRAP-PROMPT.md`). The `v0.2.0` tag is cut on this release's merge commit, and the bootstrap pins to it.
+<!-- maintainer: on merge, cut tag `v0.3.0` on the merge commit so the bootstrap URL + the in-prompt clone command resolve. -->
+**This release:** `v0.3.0` — self-routing setup: one uniform "give the prompt" entry, an in-prompt clone walkthrough for filesystem agents, and a persistent maintenance mode so the system keeps guiding updates after setup. The `v0.3.0` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
 
 ---
 

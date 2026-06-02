@@ -47,7 +47,7 @@ This is a gate, not a vibe. Do **not** silently assume "I can probably fetch the
 
 > I can't see the templates I need to build your system. Please upload or paste **SETUP-PROMPT.md** (the full file, including the Template Appendix at the bottom) and I'll continue.
 
-One hard line of honesty, true for *every* tool, that you should hold in mind from here on: **you cannot reach into another tool's project settings or upload files into another tool's UI for them.** You generate the files and the paste-in text; *they* install it. Promise exactly that and no more. Keep the UX magical; keep the promises true.
+One hard line of honesty, true for *every* tool, that you should hold in mind from here on: **you cannot reach into another tool's project settings or upload files into another tool's UI for them.** You generate the files and the paste-in text; *they* install it. Promise exactly that and no more. Keep the interface self-routing and capability-honest: the user's job is to answer questions; the tool carries the procedural load and never claims a step it cannot actually perform.
 
 ---
 
@@ -101,14 +101,22 @@ Two kinds of tool, and the path forks hard here. Figure out which you are, say s
 - **Filesystem-capable** (e.g. Claude Code, a coding agent): you can write files directly to the user's disk. You'll use the **two-folder** path below.
 - **Chat-only** (e.g. ChatGPT, Claude.ai, Grok): you **cannot** write to their disk. You'll generate file contents and have the user save them by hand. **No scaffold clone** — a non-technical user has none and needs none. Say that plainly and move on.
 
-### Path A — filesystem-capable: TWO FOLDERS, kept separate (the rule that actually matters)
+### Path A — filesystem-capable: detect where you are, then keep two folders separate
 
-Before you ask a single thing about their life, get **two paths** straight, because mixing them is the one failure that actually hurts:
+You can write to disk, so *you* handle the mechanics — the user just confirms. First, **work out where you're running** (check `pwd`), because the safe next move depends on it:
 
-1. **The scaffold clone** — where this public repo lives. Installer source. Disposable, updatable.
-   Example: `~/Projects/personal-context-system-scaffold`
-2. **The private destination** — a **separate** folder the user owns, where their actual context will live.
-   Example: `~/Context/personal-<initials>`
+- **Already inside a `personal-context-system` clone?** Good — that folder is the scaffold clone (installer source). Don't write private context here.
+- **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
+  ```bash
+  mkdir -p ~/Context
+  git clone --branch v0.3.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  ```
+  (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
+
+Then settle the **two folders**, kept separate, because mixing them is the one failure that actually hurts:
+
+1. **The scaffold clone** — installer source. Disposable, updatable, public. (e.g. `~/Context/personal-context-system-scaffold`)
+2. **The private destination** — a **separate** folder the user owns, where their actual context lives. Default `~/Context/personal-<initials>`.
 
 **The rule, and it is not negotiable by default:**
 
@@ -117,7 +125,7 @@ Before you ask a single thing about their life, get **two paths** straight, beca
 - You **never** run `git add` / `git commit` on the private folder, and never push it anywhere.
 - If — and only if — the user *explicitly overrides after you've warned them plainly* what the risk is, you may proceed into the clone. Otherwise the two folders stay separate.
 
-If the user gave you only one path, ask for the other before continuing.
+Don't run the session from *inside* either child folder by default — work from the safe parent workspace and create the two folders under it. If the user gave you only one path, ask for the other before continuing.
 
 ### Path B — chat-only: a system name + a save location (no clone, and that's fine)
 
@@ -190,11 +198,11 @@ Two artifacts, then a handoff:
 
 Then **guide** the user to install them — and here is where you stay honest (Step 0): you can't do this step *for* them across a tool boundary. So walk them through it:
 
-- For each AI tool they use: create a project, upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the instruction text into the project's instructions field.
+- For each AI tool they use: create a project — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the filesystem source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the instruction text into the project's instructions field.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
 
-Then you're done. The next time they open a conversation in any of those tools, the AI reads the bootstrap and already knows them.
+Then you're done — for now. The next time they open a conversation in any of those tools, the AI reads the bootstrap and already knows them. And because the bootstrap carries a **maintenance mode**, that same conversation can keep their context *current* over time — they just say "update my context" — not only recall it. The interface doesn't die when this setup session ends.
 
 ---
 
@@ -318,6 +326,20 @@ Read this first in any new conversation in this project. It directs you to the r
 ## Maintenance loop
 
 When substantive new content emerges in a conversation that should persist, at end of thread: propose specific edits to the relevant file. {{NAME}} reviews and applies manually. New domains may warrant new files; the ADR governs that decision.
+
+---
+
+## Maintenance mode
+
+If the user asks to update, revise, extend, or add to this context system, switch into guided-maintenance mode:
+
+1. Ask only the questions needed to identify the target file and the change.
+2. Propose the exact file edit or new file.
+3. Preserve the existing file conventions and update `Last updated`.
+4. Do not silently overwrite canonicals; surface conflicts and ask for confirmation.
+5. If the change belongs in a new domain file, explain why and use `domain-file.md` as the pattern.
+
+This system is not only for recall — it is also the surface through which the user maintains their own context over time. Setup is the first use, not the only one.
 
 ---
 
@@ -649,11 +671,29 @@ Repeat step 3 for each tool you use. The files are identical across tools.
 
 ---
 
+## Load only what a project needs (every upload is a sharing decision)
+
+You do not need to load every file into every AI project. For a specialized project, upload only the files that project needs. Example: a work project might need `identity-and-voice.md` and `work.md`, but not `family.md` or `health.md`.
+
+Treat every upload as a sharing decision. If a file contains context that does not belong in that project, leave it out.
+
+---
+
 ## Daily use
 
 Start a new conversation in any tool's project. The bootstrap runs automatically — the AI reads `_BOOTSTRAP.md` → `_INDEX.md` → whatever topic files are relevant. You don't paste anything at the start of conversations.
 
 **Is it working?** The AI knows your name and basics, applies your voice conventions without being asked, and pulls the right context for the topic. If it's being generic, the system isn't loading — most likely the instructions paste-in is missing from the settings field, or `_BOOTSTRAP.md` isn't in the project.
+
+---
+
+## Keeping this system current
+
+This system is not finished after setup. When something durable changes, start any conversation in a tool that has these files and say:
+
+"Update my context."
+
+The AI should interview you lightly, identify the file that should change, and propose the exact update. You review and save the file. The files remain the source of truth; the conversation is just the editing surface.
 
 ---
 
@@ -703,7 +743,8 @@ Copy the context files into the new tool's project, paste the instructions text 
 ```
 At the start of every conversation in this project, read _BOOTSTRAP.md
 from the project files first, and follow the read order and rules it
-specifies. The project files are the source of truth. Apply the voice +
+specifies — including its maintenance mode when you want to update your
+context. The project files are the source of truth. Apply the voice +
 style conventions described in identity-and-voice.md.
 ```
 

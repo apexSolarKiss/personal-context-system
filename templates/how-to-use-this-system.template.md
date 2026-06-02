@@ -46,11 +46,29 @@ Repeat step 3 for each tool you use. The files are identical across tools.
 
 ---
 
+## Load only what a project needs (every upload is a sharing decision)
+
+You do not need to load every file into every AI project. For a specialized project, upload only the files that project needs. Example: a work project might need `identity-and-voice.md` and `work.md`, but not `family.md` or `health.md`.
+
+Treat every upload as a sharing decision. If a file contains context that does not belong in that project, leave it out.
+
+---
+
 ## Daily use
 
 Start a new conversation in any tool's project. The bootstrap runs automatically — the AI reads `_BOOTSTRAP.md` → `_INDEX.md` → whatever topic files are relevant. You don't paste anything at the start of conversations.
 
 **Is it working?** The AI knows your name and basics, applies your voice conventions without being asked, and pulls the right context for the topic. If it's being generic, the system isn't loading — most likely the instructions paste-in is missing from the settings field, or `_BOOTSTRAP.md` isn't in the project.
+
+---
+
+## Keeping this system current
+
+This system is not finished after setup. When something durable changes, start any conversation in a tool that has these files and say:
+
+"Update my context."
+
+The AI should interview you lightly, identify the file that should change, and propose the exact update. You review and save the file. The files remain the source of truth; the conversation is just the editing surface.
 
 ---
 
