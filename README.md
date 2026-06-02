@@ -65,7 +65,7 @@ The core idea: **you are not building "memory" for one AI tool. You are building
 
 The mechanism is a small set of Markdown files plus a "bootstrap" pattern that makes the same files work reliably across tools. The full rationale is in [`templates/context-architecture-decisions.template.md`](templates/context-architecture-decisions.template.md) (the architecture decision record).
 
-Three words for three things, kept distinct: the **architecture** is the design logic, documented in the ADR; the **system** is the working thing the setup prompt generates for you; the **repo** is the scaffold that delivers both. That is why it is named `personal-context-system` — the deliverable is a working system, not a static design specification.
+The **architecture** is the design logic, documented in the ADR. The **system** is what the setup prompt generates. The **repo** is the scaffold that delivers both.
 
 ---
 
