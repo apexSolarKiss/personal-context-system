@@ -1,6 +1,6 @@
 Fetch this exact setup file and follow it:
 
-https://raw.githubusercontent.com/apexSolarKiss/personal-context-system/v0.3.2/SETUP-PROMPT.md
+https://raw.githubusercontent.com/apexSolarKiss/personal-context-system/v0.4.0/SETUP-PROMPT.md
 
 Do not read the GitHub repo tree. Do not continue unless you can see (1) the setup flow and (2) the Template Appendix with all seven template sections.
 
