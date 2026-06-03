@@ -105,11 +105,11 @@ Two kinds of tool, and the path forks hard here. Figure out which you are, say s
 
 You can write to disk, so *you* handle the mechanics — the user just confirms. First, **work out where you're running** (check `pwd`), because the safe next move depends on it:
 
-- **Already inside a `personal-context-system` clone?** Good — that folder is the scaffold clone (installer source). Don't write private context here.
+- **Already inside a `personal-context-system` clone?** Good — that folder is the scaffold clone (installer source). Don't write private context here: before you create the private folder, `cd` to a safe parent *outside* the clone (e.g. `~/Context`). Never put the private destination inside the clone — not even as a subfolder; that's one `git add` away from committing a life into a public repo.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.3.2 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.4.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -138,6 +138,10 @@ Say plainly: *"You're on a chat-only tool, so there's no repo to clone and nothi
 
 ---
 
+> **Scope-of-context guard (applies from here through the interview):** Use only the context the user supplies in *this* setup run. Do **not** infer their identity, ecosystem, default folder, initials, family, tools, or preferences from the host tool's memory, profile, account, or past chats. You may *ask*, and you may *surface* what the tool already has so they can confirm it — but do not silently *assume* it. A setup that quietly personalizes itself from one product's memory defeats the portable, user-owned point of the whole system.
+
+---
+
 ## Step 4 — name the system
 
 Ask what to call their system. **Default: `personal-<THEIR-INITIALS>`** (e.g. `personal-JD`). Override freely — `personal-context`, `my-context`, whatever they want.
@@ -148,13 +152,17 @@ One thing to keep straight: **`personal-context-system` is the public scaffold t
 
 ## Step 5 — audit what's already there
 
-Where the tool allows it, look at what context/memory already exists before you start filling files — existing built-in memory, prior project notes, anything the user already pasted in. The point is to avoid re-asking what the tool already knows, and to fold existing scraps into the new structure instead of duplicating them. Where the tool gives you no such access, just say so and move on.
+Where the tool allows it, look at what context/memory already exists before you start filling files — existing built-in memory, prior project notes, anything the user already pasted in. The point is to avoid re-asking what the tool already knows, and to fold existing scraps into the new structure instead of duplicating them. **Stay within what the user has shared or explicitly pointed you to** — don't go spelunking their filesystem or personal folders unprompted; if reading something would help, ask first. Where the tool gives you no such access, just say so and move on.
 
 ---
 
 ## Step 6 — interview
 
-Now interview the user, and build a **REAL-simple** file structure. Start with the smallest thing that actually captures them:
+Now interview the user, and build a **REAL-simple** file structure.
+
+**First, set the safety frame** (once, up front, before you start asking): keep answers high-level — this is a *context layer*, not a vault. No passwords, full account numbers, private keys, or full home addresses; reference sensitive things only at the level actually needed ("lease renews each spring," not the document; "primary checking at [bank]," not the number). These files get uploaded into AI tools, so this protects them.
+
+Start with the smallest thing that actually captures them:
 
 - **`identity-and-voice.md`** — the one file read in every conversation: who they are at a glance + how the AI should talk to them. Use the **identity-and-voice** template (Appendix).
 - **A domain file per part of life they actually want held** — household, work, a project, family, health, whatever's true for them. One domain per file, from the **domain-file** template (Appendix). Don't manufacture domains they didn't ask for.
@@ -173,11 +181,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. the tag in the setup URL — `v0.3.2` for this release)
+  - `template-version:` the scaffold release tag you generated from (e.g. the tag in the setup URL — `v0.4.0` for this release)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. If you only know "I'm working from a SETUP-PROMPT.md whose tag I can't verify," say so and leave a clearly-marked placeholder rather than inventing a tag or SHA. A wrong-but-confident provenance stamp is worse than an honest "unknown — fill after the maintainer cuts the tag."
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.4.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Now write the output, branched by capability:**
 
@@ -186,6 +194,7 @@ Generate the system using the templates in the **Template Appendix** below (or f
   - **Prefer downloadable files** (or a single **zip**) if your tool supports producing them. That's the nicest UX.
   - **Otherwise, output ONE file at a time**, each clearly labeled with its **target filename**, and **pause after each** so the user can save it before you send the next. **Never dump all the files in one giant wall-of-text response.**
   - Tell the user exactly where to save each file (the folder from Step 3, Path B).
+  - **Coach the actual save**, or the files won't land right: each must be saved as a plain-text `.md` file with its **exact name** — including leading underscores (`_BOOTSTRAP.md`, `_INDEX.md`) and the `.md` extension. Say plainly that pasting into a Google Doc or Word doc is **not** the same as saving a `.md` file. On Google Drive, the reliable path is to save the text as a `.md` file in a plain-text editor and then **upload** it — not "New → Google Doc." (This is the strongest reason to prefer the zip when you can produce one.)
 
 ---
 
@@ -198,7 +207,8 @@ Two artifacts, then a handoff:
 
 Then **guide** the user to install them — and here is where you stay honest (Step 0): you can't do this step *for* them across a tool boundary. So walk them through it:
 
-- For each AI tool they use: create a project — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the filesystem source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the instruction text into the project's instructions field.
+- **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
+- **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does. Two honest paths remain: (a) paste the instruction text into the tool's **always-on custom-instructions** field, which applies to every chat (in ChatGPT: **Settings → Personalization → Custom instructions**), and keep the context files somewhere you can attach them; or (b) as the simplest floor, **upload the context files and paste the instruction at the start of a chat** whenever they want the system active. Tell them plainly which their tool supports — never promise a projects feature they may not have.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
 
@@ -446,7 +456,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.3.2)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -734,11 +744,12 @@ Copy the context files into the new tool's project, paste the instructions text 
 ~~~markdown
 # Project instructions // paste-in for your AI tool(s)
 
-*This is the text to paste into the "Project instructions" / "Custom instructions" field in each tool's project settings. It is NOT a context file — it lives in the tool's settings.*
+*This is the text to paste into the "Project instructions" / "Custom instructions" field in each tool's settings. It is NOT a context file — it lives in the tool's settings.*
 
-*In ChatGPT: Project → gear icon → Project instructions.*
+*In ChatGPT with Projects (Plus): Project → gear icon → Project instructions.*
+*In ChatGPT without Projects (free): Settings → Personalization → Custom instructions.*
 *In Claude Projects: project → Custom Instructions field.*
-*Other tools: the equivalent always-applied instructions field.*
+*Other tools: the equivalent always-applied instructions field. If the tool has none, paste this at the start of each conversation instead.*
 
 ---
 

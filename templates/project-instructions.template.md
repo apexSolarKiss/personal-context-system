@@ -1,10 +1,11 @@
 # Project instructions // paste-in for your AI tool(s)
 
-*This is the text to paste into the "Project instructions" / "Custom instructions" field in each tool's project settings. It is NOT a context file — it lives in the tool's settings.*
+*This is the text to paste into the "Project instructions" / "Custom instructions" field in each tool's settings. It is NOT a context file — it lives in the tool's settings.*
 
-*In ChatGPT: Project → gear icon → Project instructions.*
+*In ChatGPT with Projects (Plus): Project → gear icon → Project instructions.*
+*In ChatGPT without Projects (free): Settings → Personalization → Custom instructions.*
 *In Claude Projects: project → Custom Instructions field.*
-*Other tools: the equivalent always-applied instructions field.*
+*Other tools: the equivalent always-applied instructions field. If the tool has none, paste this at the start of each conversation instead.*
 
 ---
 

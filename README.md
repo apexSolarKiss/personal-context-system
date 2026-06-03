@@ -20,6 +20,8 @@ You do not need to understand GitHub, clone a repo, or choose a tool-specific wo
 2. Attach or upload the file to your AI tool.
 3. If file upload is not available, open the file and paste its full contents into the prompt composer.
 
+**Concretely, in ChatGPT:** start a new chat, click the attach button, upload `SETUP-PROMPT.md`, and send a short message like “follow this.” No GitHub account, terminal, or clone required — uploading the one file is the whole start.
+
 If a tool rejects `.md`, rename a copy to `SETUP-PROMPT.txt` and upload that instead. The content is plain text.
 
 For URL-capable tools, use [`BOOTSTRAP-PROMPT.md`](BOOTSTRAP-PROMPT.md). It contains the pinned setup URL and tells the tool what to do if URL access fails.
@@ -108,7 +110,7 @@ Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, 
 
 For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
-**This release:** `v0.3.2` — a render-precision patch over v0.3.1: the ADR section of the setup prompt's Template Appendix now uses a `~~~markdown` outer fence so the ADR's own nested code blocks no longer prematurely close it in Markdown rendering (raw text and AI consumption were always intact). This tag also captures the README work landed since v0.3.1 — the *Crossing the Wall* essay bridge under Provenance + License, and the tightened architecture / system / repo distinction. The `v0.3.2` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
+**This release:** `v0.4.0` — an onboarding-repair pass over v0.3.2, driven by first-run user testing across chat-only and filesystem tools. The setup prompt now degrades gracefully for tools without a projects feature (free ChatGPT → Custom instructions, or paste-per-chat), coaches chat-only users to save real `.md` files rather than Google Docs, sets a "keep it high-level, not a vault" safety frame before the interview, and hardens the public/private wall on the filesystem path (an explicit clone-isolation step; no reading personal folders unprompted). The README adds a concrete ChatGPT start recipe. The `v0.4.0` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
 
 ---
 

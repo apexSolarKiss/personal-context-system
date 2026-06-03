@@ -24,7 +24,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.3.2)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
