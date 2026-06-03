@@ -108,7 +108,7 @@ Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, 
 
 For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
-**This release:** `v0.3.1` — language + UX-precision patch over v0.3.0: README diction elevated to a clean product surface, attach/upload made the universal first path (paste as fallback), the URL path routed through `BOOTSTRAP-PROMPT.md`, and the system / architecture / scaffold distinction made explicit. The `v0.3.1` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
+**This release:** `v0.3.2` — a render-precision patch over v0.3.1: the ADR section of the setup prompt's Template Appendix now uses a `~~~markdown` outer fence so the ADR's own nested code blocks no longer prematurely close it in Markdown rendering (raw text and AI consumption were always intact). This tag also captures the README work landed since v0.3.1 — the *Crossing the Wall* essay bridge under Provenance + License, and the tightened architecture / system / repo distinction. The `v0.3.2` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
 
 ---
 

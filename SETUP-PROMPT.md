@@ -109,7 +109,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.3.1 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.3.2 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -173,7 +173,7 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. the tag in the setup URL — `v0.3.1` for this release)
+  - `template-version:` the scaffold release tag you generated from (e.g. the tag in the setup URL — `v0.3.2` for this release)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
@@ -417,7 +417,9 @@ This system can live in more than one tool (e.g. a Claude project and a ChatGPT 
 
 ### Appendix — context-architecture-decisions.template.md
 
-```markdown
+(This appendix section uses a `~~~` outer fence because the ADR template contains its own ```` ``` ```` code blocks, which would otherwise prematurely close a ```` ``` ```` wrapper. When you emit the real `context-architecture-decisions.md`, it is a standalone file with no outer fence.)
+
+~~~markdown
 ---
 file: context-architecture-decisions.md
 type: canonical-reference
@@ -444,7 +446,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.3.1)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.3.2)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -616,7 +618,7 @@ Assume **anything in these files can be surfaced by any AI tool you upload them 
 ## Keep it simple to start
 
 Start with the smallest structure that captures you: an identity/voice file, plus a handful of domain files for the parts of your life you actually want the AI to hold. Add files only when a conversation produces content that fits nowhere. A system you maintain beats an elaborate one you abandon.
-```
+~~~
 
 ---
 
