@@ -8,6 +8,22 @@ When you provide the setup prompt to your AI tool, your generated context system
 
 ---
 
+## Just want to try it?
+
+Paste this into ChatGPT, Claude, or any AI chat — that is the whole start. No GitHub account, no install, no terminal:
+
+```
+Fetch this file and follow it:
+https://raw.githubusercontent.com/apexSolarKiss/personal-context-system/stable/SETUP-PROMPT.md
+If you can't open URLs, tell me and I'll paste the file in instead.
+```
+
+If the tool can't open links (e.g. ChatGPT without browsing), download [`SETUP-PROMPT.md`](SETUP-PROMPT.md) and upload that file to the chat instead — it carries everything inline.
+
+*Want to understand what it is before you run it? Keep reading.*
+
+---
+
 ## Start here: provide the setup prompt
 
 A single entry action works across tools: **provide the setup prompt.** The prompt detects the environment, chooses the right path, and guides the setup from there.
@@ -75,8 +91,9 @@ The **architecture** is the design logic, documented in the ADR. The **system** 
 
 ```text
 README.md            // this file — public orientation
-SETUP-PROMPT.md      // the one self-contained deliverable: full setup flow + all 7 templates inlined
-BOOTSTRAP-PROMPT.md  // tiny hand-deliverable: a pinned URL + fetch instruction you can text to someone
+SETUP-PROMPT.md      // the one self-contained deliverable: full setup flow + all templates inlined
+BOOTSTRAP-PROMPT.md  // tiny hand-deliverable: a stable-aliased URL + fetch instruction you can text to someone
+SHARE-KIT.md         // ready-made three-bubble chat share — the real first-touch surface
 templates/           // the genericized payload (.template suffix kept in the repo)
   context-architecture-decisions.template.md   // the ADR — why the system is shaped this way
   _BOOTSTRAP.template.md                        // AI-facing entry point (read-first)
@@ -87,7 +104,7 @@ templates/           // the genericized payload (.template suffix kept in the re
   how-to-use-this-system.template.md            // owner-facing operating manual
 ```
 
-`SETUP-PROMPT.md` inlines all seven templates in its **Template Appendix**, so a paste or upload of that one file carries the entire payload. The `templates/` directory is the modular maintainer / filesystem-agent source. The setup flow writes **clean final filenames** (no `.template`) into your private folder or output. The `.template` suffix stays here in the scaffold.
+`SETUP-PROMPT.md` inlines all its templates in its **Template Appendix**, so a paste or upload of that one file carries the entire payload. The `templates/` directory is the modular maintainer / filesystem-agent source. The setup flow writes **clean final filenames** (no `.template`) into your private folder or output. The `.template` suffix stays here in the scaffold.
 
 ---
 
@@ -110,7 +127,7 @@ Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, 
 
 For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
-**This release:** `v0.4.0` — an onboarding-repair pass over v0.3.2, driven by first-run user testing across chat-only and filesystem tools. The setup prompt now degrades gracefully for tools without a projects feature (free ChatGPT → Custom instructions, or paste-per-chat), coaches chat-only users to save real `.md` files rather than Google Docs, sets a "keep it high-level, not a vault" safety frame before the interview, and hardens the public/private wall on the filesystem path (an explicit clone-isolation step; no reading personal folders unprompted). The README adds a concrete ChatGPT start recipe. The `v0.4.0` tag is cut on this release's merge commit; the bootstrap and the in-prompt clone command pin to it.
+**This release:** `v0.4.1` — a "canonical share surface" pass over v0.4.0. The shareable bootstrap now points at a moving `stable` alias instead of a pinned tag, so a once-shared prompt never rots or 404s as the system evolves; version-specific counts were stripped from the shareable text for the same reason. The README now leads with a paste-and-go quickstart, reflecting that first-touch happens in chat, not on the repo page. The `v0.4.1` tag is cut on this release's merge commit and `stable` is fast-forwarded to it; pin to a version tag explicitly for reproducible use.
 
 ---
 
