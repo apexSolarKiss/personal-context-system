@@ -127,7 +127,7 @@ Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, 
 
 For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
-**This release:** `v0.4.1` — a "canonical share surface" pass over v0.4.0. The shareable bootstrap now points at a moving `stable` alias instead of a pinned tag, so a once-shared prompt never rots or 404s as the system evolves; version-specific counts were stripped from the shareable text for the same reason. The README now leads with a paste-and-go quickstart, reflecting that first-touch happens in chat, not on the repo page. The `v0.4.1` tag is cut on this release's merge commit and `stable` is fast-forwarded to it; pin to a version tag explicitly for reproducible use.
+**This release:** `v0.4.2` — adds a durability convention to the generated system: *Persisting durable artifacts (routed export)*. On finalize/lock/approve, the AI routes the artifact to its canonical home and checks that home before writing (no reflex duplicates), and — with filesystem access — snapshots before overwriting where the system defines an archive folder (Git history serves repo files). Lands in the ADR and `_BOOTSTRAP` templates. The `v0.4.2` tag is cut on this release's merge commit and `stable` is fast-forwarded to it; pin to a version tag explicitly for reproducible use.
 
 ---
 

@@ -109,7 +109,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.4.1 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.4.2 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -181,11 +181,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.4.1` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.4.2` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.4.1 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.4.2 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Now write the output, branched by capability:**
 
@@ -337,6 +337,8 @@ Read this first in any new conversation in this project. It directs you to the r
 
 When substantive new content emerges in a conversation that should persist, at end of thread: propose specific edits to the relevant file. {{NAME}} reviews and applies manually. New domains may warrant new files; the ADR governs that decision.
 
+**Persist finalized artifacts deliberately.** When an artifact is finalized, locked, or approved, route it to its canonical home and check that home before writing — a locked artifact left only in chat is one closed tab from lost, and a reflex copy duplicates what may already be canonical. Supersede means history, not erasure: with filesystem access, snapshot before overwriting where the system defines an archive folder (Git history serves this for repo files); chat-only tools propose, the user performs. Full rule: the ADR's *Persisting durable artifacts (routed export)*.
+
 ---
 
 ## Maintenance mode
@@ -456,7 +458,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.1)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.2)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -616,6 +618,22 @@ When new information arrives, ask:
 4. **If unsure → default to a file.** Always-on preferences are the more limited resource.
 
 **End-of-thread habit:** at the end of a substantive conversation, ask the AI *"what new content should be added to which file? Propose specific edits."* Review (you are the source of truth), apply offline, bump the date, re-sync to each tool. Skipping this is how files go stale and thread thinking gets lost.
+
+---
+
+## Persisting durable artifacts (routed export)
+
+When an artifact is **finalized, locked, or approved**, persist it deliberately — don't leave it living only as chat text, and don't dump a reflex copy somewhere arbitrary.
+
+- **Conversation is not storage.** A locked artifact that exists only in a chat is one closed tab from lost.
+- **Finalization triggers the review — not every output.** The trigger is a *finalized, durable* artifact; ephemeral one-offs are not filed.
+- **Persist = route to its canonical home**, not "dump to a scratch/outputs folder":
+  - a **repo deliverable** lives in its repo;
+  - a **context edit** becomes a transit copy for loading into the relevant project;
+  - a **loose durable artifact** with no repo home goes to the system's scratch / outputs location;
+  - an **ephemeral one-off** is not filed.
+- **Check the home before writing.** Inspect what's already there; decide update vs. no-op vs. new artifact — so you don't duplicate something already versioned.
+- **Supersede means history, not erasure.** Where the acting tool has filesystem write access, check-before-write carries a snapshot obligation: if the system defines an archive/snapshot folder, write a dated snapshot there before (or alongside) any canonical overwrite — unless a current byte-identical snapshot already exists. If the artifact belongs to a Git repo, Git history *is* the snapshot. A chat-only tool proposes the edit; the user performs the file/snapshot step. Prior snapshots are not deleted as ordinary update work.
 
 ---
 

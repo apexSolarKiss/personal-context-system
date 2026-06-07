@@ -24,7 +24,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.1)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.2)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -184,6 +184,22 @@ When new information arrives, ask:
 4. **If unsure → default to a file.** Always-on preferences are the more limited resource.
 
 **End-of-thread habit:** at the end of a substantive conversation, ask the AI *"what new content should be added to which file? Propose specific edits."* Review (you are the source of truth), apply offline, bump the date, re-sync to each tool. Skipping this is how files go stale and thread thinking gets lost.
+
+---
+
+## Persisting durable artifacts (routed export)
+
+When an artifact is **finalized, locked, or approved**, persist it deliberately — don't leave it living only as chat text, and don't dump a reflex copy somewhere arbitrary.
+
+- **Conversation is not storage.** A locked artifact that exists only in a chat is one closed tab from lost.
+- **Finalization triggers the review — not every output.** The trigger is a *finalized, durable* artifact; ephemeral one-offs are not filed.
+- **Persist = route to its canonical home**, not "dump to a scratch/outputs folder":
+  - a **repo deliverable** lives in its repo;
+  - a **context edit** becomes a transit copy for loading into the relevant project;
+  - a **loose durable artifact** with no repo home goes to the system's scratch / outputs location;
+  - an **ephemeral one-off** is not filed.
+- **Check the home before writing.** Inspect what's already there; decide update vs. no-op vs. new artifact — so you don't duplicate something already versioned.
+- **Supersede means history, not erasure.** Where the acting tool has filesystem write access, check-before-write carries a snapshot obligation: if the system defines an archive/snapshot folder, write a dated snapshot there before (or alongside) any canonical overwrite — unless a current byte-identical snapshot already exists. If the artifact belongs to a Git repo, Git history *is* the snapshot. A chat-only tool proposes the edit; the user performs the file/snapshot step. Prior snapshots are not deleted as ordinary update work.
 
 ---
 

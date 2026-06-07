@@ -26,6 +26,8 @@ Read this first in any new conversation in this project. It directs you to the r
 
 When substantive new content emerges in a conversation that should persist, at end of thread: propose specific edits to the relevant file. {{NAME}} reviews and applies manually. New domains may warrant new files; the ADR governs that decision.
 
+**Persist finalized artifacts deliberately.** When an artifact is finalized, locked, or approved, route it to its canonical home and check that home before writing — a locked artifact left only in chat is one closed tab from lost, and a reflex copy duplicates what may already be canonical. Supersede means history, not erasure: with filesystem access, snapshot before overwriting where the system defines an archive folder (Git history serves this for repo files); chat-only tools propose, the user performs. Full rule: the ADR's *Persisting durable artifacts (routed export)*.
+
 ---
 
 ## Maintenance mode
