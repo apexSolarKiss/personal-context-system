@@ -19,6 +19,15 @@ context. The project files are the source of truth. Apply the voice +
 style conventions described in identity-and-voice.md.
 ```
 
+**Cloud-connector mode — add this line only** if your canonicals live in Dropbox/Drive and this tool has a connector to them:
+
+```
+If _INDEX.md lists connector-backed canonical paths, read those live files
+by exact path through the connector before substantive work; if the
+connector fails or a path is missing, say so and ask me to upload or paste
+that file — don't guess from memory.
+```
+
 ---
 
 ## Why this exists

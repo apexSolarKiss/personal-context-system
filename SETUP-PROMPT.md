@@ -109,7 +109,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.4.2 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.5.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -135,6 +135,8 @@ You can't write to disk, so there's nothing to "clone" and no two-folder trap to
 2. **Where they'll save the generated files** — a real folder they own (e.g. `~/Context/personal-JD`, a Dropbox/Drive folder, wherever they keep notes). This is their durable, canonical copy; the tool's project is just a mounted copy of it.
 
 Say plainly: *"You're on a chat-only tool, so there's no repo to clone and nothing to install on disk from my side — I'll generate your files and you save them into a folder you own."* Then continue.
+
+**Optional — connector mode (only where the tool actually connects to that storage).** If they'll keep the canonical files in Dropbox / Google Drive / similar *and* their AI tool exposes a connector to it, they don't have to upload full copies into every project. They can mount just the map — `_BOOTSTRAP.md` + `_INDEX.md` with the canonical paths filled in — and let the tool read the live files through the connector. Offer this **only where the connector genuinely exists**; if it doesn't, the upload floor is the path, no apology needed. Either way the interview and generation are identical — connector mode only changes what gets mounted versus read live, which you handle at install (Step 8).
 
 ---
 
@@ -181,11 +183,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.4.2` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.5.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.4.2 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.5.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Now write the output, branched by capability:**
 
@@ -209,6 +211,7 @@ Then **guide** the user to install them — and here is where you stay honest (S
 
 - **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
 - **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does. Two honest paths remain: (a) paste the instruction text into the tool's **always-on custom-instructions** field, which applies to every chat (in ChatGPT: **Settings → Personalization → Custom instructions**), and keep the context files somewhere you can attach them; or (b) as the simplest floor, **upload the context files and paste the instruction at the start of a chat** whenever they want the system active. Tell them plainly which their tool supports — never promise a projects feature they may not have.
+- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` and `_INDEX.md` — with the canonical Dropbox/Drive paths filled into the index — and paste the instruction. The tool reads the live canonical files through the connector on demand. Fill in the `## Connector read protocol` in `_INDEX.md` so it reads exact paths, and add the optional connector line from `project-instructions.md`. If a path ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
 
@@ -328,6 +331,7 @@ Read this first in any new conversation in this project. It directs you to the r
 ## Core rules
 
 - **Files are source of truth.** If something in conversation conflicts with a file, surface the conflict; don't silently smooth it over.
+- **Connector-backed canonicals (if `_INDEX.md` declares them).** If the index lists cloud-connector canonical paths, fetch the relevant live files by **exact path** through the available connector before substantive work — the live file is the source of truth, not any uploaded copy. If the connector is unavailable or a path fails, say so and ask the user to upload or paste that file; don't fall back to memory or a stale project copy. **Never claim you read a cloud file unless the connector actually returned it.**
 - **Apply the voice + style conventions** in `{{VOICE_FILE}}` (e.g. `identity-and-voice.md`). [example: tone, formatting conventions, what to challenge vs. accept, how to handle outbound communication]
 - **Distinguish tool facts from reader instructions.** Tool-specific behavior names the tool; instructions telling you what to do are written tool-agnostically (imperative or "the AI") so the same files work in any tool. See the ADR.
 
@@ -381,12 +385,36 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 
 ---
 
+## Canonical storage mode
+
+Where your canonical files actually live — one of these is true for you:
+
+- **Local-folder canonical** — the files live in a folder you own on disk; a filesystem-capable tool reads them there directly.
+- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The paths in the file list below are the **canonical paths**, and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
+- **Project-file mirror** — the files uploaded into the AI project are **copies**. If a local or cloud canonical also exists, the canonical wins and the upload is a fallback that can go stale.
+
+This is optional. With no connector and no separate canonical folder, the uploaded project files simply *are* your working copy — the universal floor. Connector mode is an upgrade, not a requirement.
+
+## Connector read protocol
+
+Applies only in **cloud-connector** mode:
+
+1. **Read the exact paths** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
+2. **Fetch the relevant live files through the connector** before substantive work — the same read order the bootstrap directs, sourced live.
+3. **If a path fails** (connector unavailable, blocked, not on the user's plan), say **which path failed** and ask the user to upload or paste that file. Do not reconstruct its contents from memory.
+4. **The connector canonical wins over a stale project copy.** If an uploaded copy conflicts with the live file the connector returned, the live file is authoritative.
+5. **A connector read is verification, not write authority.** Propose edits back through the maintenance loop; only write through a connector if the tool explicitly supports it *and* the user asks.
+
+---
+
 ## Files
 
 <!--
 This is a STARTER set. Keep only the files that apply to you; the setup interview can
 delete the rest. Add new files (and categories) as your context grows. One line each:
   **`<name>.md`** // <type> // <one-line description + when to pull it>
+In cloud-connector mode, add the canonical path so the AI fetches the right live file:
+  **`<name>.md`** // <type> // canonical: `<Dropbox/Drive path>` // <when to pull it>
 -->
 
 ### Bootstrap (read-first)
@@ -422,7 +450,7 @@ delete the rest. Add new files (and categories) as your context grows. One line 
 
 ## Cross-tool deployment
 
-This system can live in more than one tool (e.g. a Claude project and a ChatGPT project) at once. Files are identical across tools — when you update one, update the others. The bootstrap pattern + the pasted instruction (see `project-instructions.md`) is what guarantees the system invokes itself in each tool. Your offline folder is the durable backup and the canonical source the tools re-sync from.
+This system can live in more than one tool (e.g. a Claude project and a ChatGPT project) at once. Files are identical across tools — when you update one, update the others. The bootstrap pattern + the pasted instruction (see `project-instructions.md`) is what guarantees the system invokes itself in each tool. Your offline folder is the durable backup and the canonical source the tools re-sync from. In cloud-connector mode there is less to re-sync: the tools read the one live canonical through the connector, so an approved edit to the cloud file is visible everywhere at once (uploaded copies, if any, are fallbacks to refresh).
 ```
 
 ---
@@ -458,7 +486,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.2)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -504,6 +532,16 @@ Durable context lives in three tiers with different reliability properties acros
 **Quick test:** *would I want the AI to apply this in every conversation, even one about cooking or code?* If no, it's a file, not an always-on preference.
 
 *(Advanced: in tools with a dedicated memory API — e.g. Claude's `memory_user_edits` — tier 1 maps onto that feature.)*
+
+### Connector-backed canonicals (optional refinement of tier 2)
+
+Tier 2 says the load-bearing files live "in the tool's project/sources + an offline copy you own." Those two copies can collapse into **one live copy** when your AI tool can connect to your storage.
+
+A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), and any uploaded copy is a mirror or fallback, not the source of truth.
+
+**The index owns the read path.** The AI reads the exact canonical paths named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact paths, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
+
+The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface; the files stay in the storage you own — mount the map, not the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
 
 ---
 
@@ -594,6 +632,7 @@ When memory, files, and conversation disagree:
 1. **A file wins over always-on preferences.** Files are your maintained source of truth; built-in preferences/memory are lossy behavioral compression.
 2. **The most recent dated copy wins.** If two copies drift, the newer timestamp is authoritative.
 3. **The in-file header wins over the filename.** The header is what the AI reads.
+4. **A connector-read canonical wins over an uploaded project copy.** In cloud-connector mode, the live file the connector returns beats a possibly-stale mirror uploaded into the project.
 
 ---
 
@@ -693,6 +732,12 @@ If you use a filesystem-capable tool, setup may write your generated files direc
 
 **Never fill private context inside a scaffold clone, and never commit private content back to the public repo.** This avoids the obvious failure mode: accidentally committing your private life-context into a Git repo.
 
+### Optional: cloud-connector mode (Dropbox / Google Drive)
+
+If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files in a Dropbox or Google Drive folder you own, and give each AI project only the map — `_BOOTSTRAP.md` and `_INDEX.md`, with the canonical paths filled into the index. The AI reads the live files through the connector when a conversation needs them, so your canonicals never go stale inside a project.
+
+If your tool has **no** connector (or it isn't on your plan), nothing changes: upload the relevant files into the project or chat as usual. Those uploads are copies — after any approved change, update the canonical folder so the copies don't drift. Connector mode is optional; the upload floor always works.
+
 ## One-time setup
 
 1. **Create your private folder** (cloud-synced is fine), e.g. `{{SYSTEM_NAME}}`, separate from the scaffold clone. This is the durable home and canonical source of your context.
@@ -779,6 +824,15 @@ from the project files first, and follow the read order and rules it
 specifies — including its maintenance mode when you want to update your
 context. The project files are the source of truth. Apply the voice +
 style conventions described in identity-and-voice.md.
+```
+
+**Cloud-connector mode — add this line only** if your canonicals live in Dropbox/Drive and this tool has a connector to them:
+
+```
+If _INDEX.md lists connector-backed canonical paths, read those live files
+by exact path through the connector before substantive work; if the
+connector fails or a path is missing, say so and ask me to upload or paste
+that file — don't guess from memory.
 ```
 
 ---

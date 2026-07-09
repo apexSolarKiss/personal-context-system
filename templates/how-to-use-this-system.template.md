@@ -38,6 +38,12 @@ If you use a filesystem-capable tool, setup may write your generated files direc
 
 **Never fill private context inside a scaffold clone, and never commit private content back to the public repo.** This avoids the obvious failure mode: accidentally committing your private life-context into a Git repo.
 
+### Optional: cloud-connector mode (Dropbox / Google Drive)
+
+If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files in a Dropbox or Google Drive folder you own, and give each AI project only the map — `_BOOTSTRAP.md` and `_INDEX.md`, with the canonical paths filled into the index. The AI reads the live files through the connector when a conversation needs them, so your canonicals never go stale inside a project.
+
+If your tool has **no** connector (or it isn't on your plan), nothing changes: upload the relevant files into the project or chat as usual. Those uploads are copies — after any approved change, update the canonical folder so the copies don't drift. Connector mode is optional; the upload floor always works.
+
 ## One-time setup
 
 1. **Create your private folder** (cloud-synced is fine), e.g. `{{SYSTEM_NAME}}`, separate from the scaffold clone. This is the durable home and canonical source of your context.
