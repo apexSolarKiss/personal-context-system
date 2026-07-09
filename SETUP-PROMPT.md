@@ -109,7 +109,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.5.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.5.1 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -156,6 +156,18 @@ One thing to keep straight: **`personal-context-system` is the public scaffold t
 
 Where the tool allows it, look at what context/memory already exists before you start filling files — existing built-in memory, prior project notes, anything the user already pasted in. The point is to avoid re-asking what the tool already knows, and to fold existing scraps into the new structure instead of duplicating them. **Stay within what the user has shared or explicitly pointed you to** — don't go spelunking their filesystem or personal folders unprompted; if reading something would help, ask first. Where the tool gives you no such access, just say so and move on.
 
+**Optional — offer to import existing context (keep it light).** Some users already have useful context about themselves in another AI tool, an old chat, an exported memory, or a document. Offer to fold it in — but don't turn setup into a migration project:
+
+- Ask once: *"Do you already have useful context about yourself in another AI tool, an old chat, a memory export, or a document you'd want folded in?"* If no, just continue — a fresh interview is always the floor.
+- If yes, keep it to **one or two high-signal sources** to start (the thread or doc that knows them best), not an exhaustive sweep. More can come later.
+- **Source is here** (uploaded/pasted): read only what they share.
+- **Source is in another tool/thread:** don't try to reach it yourself. Generate a **short extraction prompt on the spot**, adapted to their source and comfort — not a fixed script. A serviceable seed to adapt: *"Extract durable context about me from this source for a personal context system — stable facts, preferences, how I like to be communicated with, goals, recurring projects, and anything sensitive to handle carefully. Skip generic filler. Mark anything you're inferring or unsure about. Output concise Markdown."* Have them bring the result back here.
+- **Synthesis is not validation.** Treat whatever comes back as **draft source material, not truth** — multiple sources agreeing makes a claim a stronger *candidate*, but nothing is canonical until the user confirms it. Before writing any of it into the generated files, pause and show the user a short validation list, and write only the confirmed items:
+    - **Ready to keep** — stable, low-risk, well-supported.
+    - **Confirm first** — single-source, inferred, uncertain, sensitive, or high-impact.
+    - **Resolve** — contradictions or tensions between sources.
+    - **Leave out** — anything they don't want in durable context.
+
 ---
 
 ## Step 6 — interview
@@ -183,11 +195,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.5.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.5.1` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.5.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.5.1 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Now write the output, branched by capability:**
 
@@ -212,6 +224,7 @@ Then **guide** the user to install them — and here is where you stay honest (S
 - **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
 - **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does. Two honest paths remain: (a) paste the instruction text into the tool's **always-on custom-instructions** field, which applies to every chat (in ChatGPT: **Settings → Personalization → Custom instructions**), and keep the context files somewhere you can attach them; or (b) as the simplest floor, **upload the context files and paste the instruction at the start of a chat** whenever they want the system active. Tell them plainly which their tool supports — never promise a projects feature they may not have.
 - **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` and `_INDEX.md` — with the canonical connector locators (a path, file URL, or file ID, depending on the connector) filled into the index — and paste the instruction. The tool reads the live canonical files through the connector on demand. Fill in the `## Connector read protocol` in `_INDEX.md` so it reads exact locators, and add the optional connector line from `project-instructions.md`. **Fill connector locators only after the user has confirmed the exact cloud folder/path, file URL, or file ID** — if the exact locator isn't known yet (e.g. the files aren't saved into the cloud folder yet), leave a clear placeholder in `_INDEX.md` and tell the user to replace it after saving the files, before relying on connector mode. If a locator ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
+- **Optional — a global behavior-preferences block.** The project instructions above make the tool behave right *inside this project*. If the user also wants it to treat them consistently *everywhere* in that tool, offer to generate a short **behavior-only** block for the tool's always-on custom-instructions/preferences area — tone, formatting, what to push on vs. accept, outbound-comms default, and the source-of-truth rule (*durable facts live in my files; if memory conflicts with a file, the file wins*). **Behavior only — no life facts** (those stay in the files). It's a *derived* paste-in, not a new canonical file: when `identity-and-voice.md` changes, regenerate it rather than editing it as a separate source. Name the install surface generically — settings move — e.g. *"wherever your tool keeps custom instructions or preferences."* If the tool has no such field, keep the block and paste it at the start of chats where you want these behavior defaults active.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
 
@@ -486,7 +499,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.0)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.1)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -532,6 +545,8 @@ Durable context lives in three tiers with different reliability properties acros
 **Quick test:** *would I want the AI to apply this in every conversation, even one about cooking or code?* If no, it's a file, not an always-on preference.
 
 *(Advanced: in tools with a dedicated memory API — e.g. Claude's `memory_user_edits` — tier 1 maps onto that feature.)*
+
+**Installing tier 1 (optional).** Where a tool has an always-on custom-instructions/preferences field, you can install a short **behavior-only** block there so it treats you consistently *across the whole tool*, not only inside one project. Derive it from `identity-and-voice.md` (tone, formatting, push-vs-accept, outbound default, and *files win over memory*), keep it **behavior-only — no life facts**, and regenerate it when `identity-and-voice.md` changes rather than maintaining a second source. It is a *derived* paste-in, not a new canonical file.
 
 ### Connector-backed canonicals (optional refinement of tier 2)
 
@@ -658,6 +673,8 @@ When new information arrives, ask:
 
 **End-of-thread habit:** at the end of a substantive conversation, ask the AI *"what new content should be added to which file? Propose specific edits."* Review (you are the source of truth), apply offline, bump the date, re-sync to each tool. Skipping this is how files go stale and thread thinking gets lost.
 
+**Imported / extracted context is draft source material, not truth.** Context pulled in from another AI tool, an old chat, a memory export, or a document is *evidence*, not canon — it may be partial, stale, inferred, or contradictory. Before any of it lands in a file, confirm the uncertain, sensitive, contradictory, inferred, or single-source items. It becomes canonical only after you review it: the tool proposes, you approve. **Synthesis is not validation** — organizing sources into a clean draft is not the same as confirming it; agreement across sources is evidence, not proof.
+
 ---
 
 ## Persisting durable artifacts (routed export)
@@ -745,6 +762,15 @@ If your tool has **no** connector (or it isn't on your plan), nothing changes: u
 3. **Per tool:** create a project, upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the text from `project-instructions.md` into the project's instructions field.
 
 Repeat step 3 for each tool you use. The files are identical across tools.
+
+---
+
+## Optional add-ons
+
+Two things you can layer on later — both optional, neither required for the system to work:
+
+- **Import existing context.** If you already have useful context about yourself in another AI tool, an old chat, an exported memory, or a document, you can fold it in instead of starting from scratch. Point the setup (or any later "update my context" conversation) at **one or two high-signal sources**; it will help you extract and consolidate them. Treat whatever comes out as a **draft** — you review and approve what actually lands in your files. Your files are canonical only after you've okayed the content. Agreement across sources is evidence, not proof — your review is the validation step (*synthesis is not validation*).
+- **Global behavior preferences.** The project instructions make a tool behave right *inside your project*. If you also want it to treat you consistently *everywhere* in that tool, paste a short **behavior-only** block — tone, formatting, pushback style, outbound-comms default, and *files win over memory* — into the tool's global custom-instructions/preferences area. Derive it from `identity-and-voice.md` and regenerate it when that file changes; **keep life facts out of it** (facts stay in your files). The setup guide can produce this block for you.
 
 ---
 
