@@ -19,7 +19,7 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 Where your canonical files actually live — one of these is true for you:
 
 - **Local-folder canonical** — the files live in a folder you own on disk; a filesystem-capable tool reads them there directly.
-- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The paths in the file list below are the **canonical paths**, and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
+- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The locators in the file list below are the **canonical locators** (a path, file URL, or file ID, depending on the connector), and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
 - **Project-file mirror** — the files uploaded into the AI project are **copies**. If a local or cloud canonical also exists, the canonical wins and the upload is a fallback that can go stale.
 
 This is optional. With no connector and no separate canonical folder, the uploaded project files simply *are* your working copy — the universal floor. Connector mode is an upgrade, not a requirement.
@@ -28,9 +28,9 @@ This is optional. With no connector and no separate canonical folder, the upload
 
 Applies only in **cloud-connector** mode:
 
-1. **Read the exact paths** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
+1. **Read the exact connector locators** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
 2. **Fetch the relevant live files through the connector** before substantive work — the same read order the bootstrap directs, sourced live.
-3. **If a path fails** (connector unavailable, blocked, not on the user's plan), say **which path failed** and ask the user to upload or paste that file. Do not reconstruct its contents from memory.
+3. **If a locator fails** (connector unavailable, blocked, not on the user's plan), say **which locator failed** and ask the user to upload or paste that file. Do not reconstruct its contents from memory.
 4. **The connector canonical wins over a stale project copy.** If an uploaded copy conflicts with the live file the connector returned, the live file is authoritative.
 5. **A connector read is verification, not write authority.** Propose edits back through the maintenance loop; only write through a connector if the tool explicitly supports it *and* the user asks.
 
@@ -42,8 +42,8 @@ Applies only in **cloud-connector** mode:
 This is a STARTER set. Keep only the files that apply to you; the setup interview can
 delete the rest. Add new files (and categories) as your context grows. One line each:
   **`<name>.md`** // <type> // <one-line description + when to pull it>
-In cloud-connector mode, add the canonical path so the AI fetches the right live file:
-  **`<name>.md`** // <type> // canonical: `<Dropbox/Drive path>` // <when to pull it>
+In cloud-connector mode, add the canonical locator so the AI fetches the right live file:
+  **`<name>.md`** // <type> // canonical: `<connector path / file URL / file ID>` // <when to pull it>
 -->
 
 ### Bootstrap (read-first)

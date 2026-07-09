@@ -15,17 +15,19 @@
 At the start of every conversation in this project, read _BOOTSTRAP.md
 from the project files first, and follow the read order and rules it
 specifies — including its maintenance mode when you want to update your
-context. The project files are the source of truth. Apply the voice +
-style conventions described in identity-and-voice.md.
+context. The context files named by _INDEX.md are the source of truth:
+they may be uploaded project files, local files, or connector-backed
+canonicals. Apply the voice + style conventions described in
+identity-and-voice.md.
 ```
 
 **Cloud-connector mode — add this line only** if your canonicals live in Dropbox/Drive and this tool has a connector to them:
 
 ```
-If _INDEX.md lists connector-backed canonical paths, read those live files
-by exact path through the connector before substantive work; if the
-connector fails or a path is missing, say so and ask me to upload or paste
-that file — don't guess from memory.
+If _INDEX.md lists connector-backed canonical locators, read those live
+files by exact locator through the connector before substantive work; if
+the connector fails or a locator is missing, say so and ask me to upload
+or paste that file — don't guess from memory.
 ```
 
 ---

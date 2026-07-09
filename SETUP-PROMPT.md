@@ -136,7 +136,7 @@ You can't write to disk, so there's nothing to "clone" and no two-folder trap to
 
 Say plainly: *"You're on a chat-only tool, so there's no repo to clone and nothing to install on disk from my side — I'll generate your files and you save them into a folder you own."* Then continue.
 
-**Optional — connector mode (only where the tool actually connects to that storage).** If they'll keep the canonical files in Dropbox / Google Drive / similar *and* their AI tool exposes a connector to it, they don't have to upload full copies into every project. They can mount just the map — `_BOOTSTRAP.md` + `_INDEX.md` with the canonical paths filled in — and let the tool read the live files through the connector. Offer this **only where the connector genuinely exists**; if it doesn't, the upload floor is the path, no apology needed. Either way the interview and generation are identical — connector mode only changes what gets mounted versus read live, which you handle at install (Step 8).
+**Optional — connector mode (only where the tool actually connects to that storage).** If they'll keep the canonical files in Dropbox / Google Drive / similar *and* their AI tool exposes a connector to it, they don't have to upload full copies into every project. They can mount just the map — `_BOOTSTRAP.md` + `_INDEX.md` with the canonical locators filled in — and let the tool read the live files through the connector. Offer this **only where the connector genuinely exists**; if it doesn't, the upload floor is the path, no apology needed. Either way the interview and generation are identical — connector mode only changes what gets mounted versus read live, which you handle at install (Step 8).
 
 ---
 
@@ -211,7 +211,7 @@ Then **guide** the user to install them — and here is where you stay honest (S
 
 - **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
 - **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does. Two honest paths remain: (a) paste the instruction text into the tool's **always-on custom-instructions** field, which applies to every chat (in ChatGPT: **Settings → Personalization → Custom instructions**), and keep the context files somewhere you can attach them; or (b) as the simplest floor, **upload the context files and paste the instruction at the start of a chat** whenever they want the system active. Tell them plainly which their tool supports — never promise a projects feature they may not have.
-- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` and `_INDEX.md` — with the canonical Dropbox/Drive paths filled into the index — and paste the instruction. The tool reads the live canonical files through the connector on demand. Fill in the `## Connector read protocol` in `_INDEX.md` so it reads exact paths, and add the optional connector line from `project-instructions.md`. If a path ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
+- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` and `_INDEX.md` — with the canonical connector locators (a path, file URL, or file ID, depending on the connector) filled into the index — and paste the instruction. The tool reads the live canonical files through the connector on demand. Fill in the `## Connector read protocol` in `_INDEX.md` so it reads exact locators, and add the optional connector line from `project-instructions.md`. **Fill connector locators only after the user has confirmed the exact cloud folder/path, file URL, or file ID** — if the exact locator isn't known yet (e.g. the files aren't saved into the cloud folder yet), leave a clear placeholder in `_INDEX.md` and tell the user to replace it after saving the files, before relying on connector mode. If a locator ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
 
@@ -331,7 +331,7 @@ Read this first in any new conversation in this project. It directs you to the r
 ## Core rules
 
 - **Files are source of truth.** If something in conversation conflicts with a file, surface the conflict; don't silently smooth it over.
-- **Connector-backed canonicals (if `_INDEX.md` declares them).** If the index lists cloud-connector canonical paths, fetch the relevant live files by **exact path** through the available connector before substantive work — the live file is the source of truth, not any uploaded copy. If the connector is unavailable or a path fails, say so and ask the user to upload or paste that file; don't fall back to memory or a stale project copy. **Never claim you read a cloud file unless the connector actually returned it.**
+- **Connector-backed canonicals (if `_INDEX.md` declares them).** If the index lists cloud-connector canonical locators, fetch the relevant live files by **exact connector locator** through the available connector before substantive work — the live file is the source of truth, not any uploaded copy. If the connector is unavailable or a locator fails, say so and ask the user to upload or paste that file; don't fall back to memory or a stale project copy. **Never claim you read a cloud file unless the connector actually returned it.**
 - **Apply the voice + style conventions** in `{{VOICE_FILE}}` (e.g. `identity-and-voice.md`). [example: tone, formatting conventions, what to challenge vs. accept, how to handle outbound communication]
 - **Distinguish tool facts from reader instructions.** Tool-specific behavior names the tool; instructions telling you what to do are written tool-agnostically (imperative or "the AI") so the same files work in any tool. See the ADR.
 
@@ -390,7 +390,7 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 Where your canonical files actually live — one of these is true for you:
 
 - **Local-folder canonical** — the files live in a folder you own on disk; a filesystem-capable tool reads them there directly.
-- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The paths in the file list below are the **canonical paths**, and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
+- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The locators in the file list below are the **canonical locators** (a path, file URL, or file ID, depending on the connector), and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
 - **Project-file mirror** — the files uploaded into the AI project are **copies**. If a local or cloud canonical also exists, the canonical wins and the upload is a fallback that can go stale.
 
 This is optional. With no connector and no separate canonical folder, the uploaded project files simply *are* your working copy — the universal floor. Connector mode is an upgrade, not a requirement.
@@ -399,9 +399,9 @@ This is optional. With no connector and no separate canonical folder, the upload
 
 Applies only in **cloud-connector** mode:
 
-1. **Read the exact paths** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
+1. **Read the exact connector locators** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
 2. **Fetch the relevant live files through the connector** before substantive work — the same read order the bootstrap directs, sourced live.
-3. **If a path fails** (connector unavailable, blocked, not on the user's plan), say **which path failed** and ask the user to upload or paste that file. Do not reconstruct its contents from memory.
+3. **If a locator fails** (connector unavailable, blocked, not on the user's plan), say **which locator failed** and ask the user to upload or paste that file. Do not reconstruct its contents from memory.
 4. **The connector canonical wins over a stale project copy.** If an uploaded copy conflicts with the live file the connector returned, the live file is authoritative.
 5. **A connector read is verification, not write authority.** Propose edits back through the maintenance loop; only write through a connector if the tool explicitly supports it *and* the user asks.
 
@@ -413,8 +413,8 @@ Applies only in **cloud-connector** mode:
 This is a STARTER set. Keep only the files that apply to you; the setup interview can
 delete the rest. Add new files (and categories) as your context grows. One line each:
   **`<name>.md`** // <type> // <one-line description + when to pull it>
-In cloud-connector mode, add the canonical path so the AI fetches the right live file:
-  **`<name>.md`** // <type> // canonical: `<Dropbox/Drive path>` // <when to pull it>
+In cloud-connector mode, add the canonical locator so the AI fetches the right live file:
+  **`<name>.md`** // <type> // canonical: `<connector path / file URL / file ID>` // <when to pull it>
 -->
 
 ### Bootstrap (read-first)
@@ -539,7 +539,7 @@ Tier 2 says the load-bearing files live "in the tool's project/sources + an offl
 
 A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), and any uploaded copy is a mirror or fallback, not the source of truth.
 
-**The index owns the read path.** The AI reads the exact canonical paths named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact paths, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
+**The index owns the read path.** The AI reads the exact canonical locators named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact locators, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
 
 The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface; the files stay in the storage you own — mount the map, not the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
 
@@ -734,7 +734,7 @@ If you use a filesystem-capable tool, setup may write your generated files direc
 
 ### Optional: cloud-connector mode (Dropbox / Google Drive)
 
-If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files in a Dropbox or Google Drive folder you own, and give each AI project only the map — `_BOOTSTRAP.md` and `_INDEX.md`, with the canonical paths filled into the index. The AI reads the live files through the connector when a conversation needs them, so your canonicals never go stale inside a project.
+If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files in a Dropbox or Google Drive folder you own, and give each AI project only the map — `_BOOTSTRAP.md` and `_INDEX.md`, with the canonical locators filled into the index. The AI reads the live files through the connector when a conversation needs them, so your canonicals never go stale inside a project.
 
 If your tool has **no** connector (or it isn't on your plan), nothing changes: upload the relevant files into the project or chat as usual. Those uploads are copies — after any approved change, update the canonical folder so the copies don't drift. Connector mode is optional; the upload floor always works.
 
@@ -822,17 +822,19 @@ Copy the context files into the new tool's project, paste the instructions text 
 At the start of every conversation in this project, read _BOOTSTRAP.md
 from the project files first, and follow the read order and rules it
 specifies — including its maintenance mode when you want to update your
-context. The project files are the source of truth. Apply the voice +
-style conventions described in identity-and-voice.md.
+context. The context files named by _INDEX.md are the source of truth:
+they may be uploaded project files, local files, or connector-backed
+canonicals. Apply the voice + style conventions described in
+identity-and-voice.md.
 ```
 
 **Cloud-connector mode — add this line only** if your canonicals live in Dropbox/Drive and this tool has a connector to them:
 
 ```
-If _INDEX.md lists connector-backed canonical paths, read those live files
-by exact path through the connector before substantive work; if the
-connector fails or a path is missing, say so and ask me to upload or paste
-that file — don't guess from memory.
+If _INDEX.md lists connector-backed canonical locators, read those live
+files by exact locator through the connector before substantive work; if
+the connector fails or a locator is missing, say so and ask me to upload
+or paste that file — don't guess from memory.
 ```
 
 ---

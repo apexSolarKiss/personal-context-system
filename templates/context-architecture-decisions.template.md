@@ -77,7 +77,7 @@ Tier 2 says the load-bearing files live "in the tool's project/sources + an offl
 
 A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), and any uploaded copy is a mirror or fallback, not the source of truth.
 
-**The index owns the read path.** The AI reads the exact canonical paths named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact paths, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
+**The index owns the read path.** The AI reads the exact canonical locators named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact locators, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
 
 The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface; the files stay in the storage you own — mount the map, not the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
 
