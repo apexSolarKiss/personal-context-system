@@ -198,7 +198,7 @@ When new information arrives, ask:
 
 **End-of-thread habit:** at the end of a substantive conversation, ask the AI *"what new content should be added to which file? Propose specific edits."* Review (you are the source of truth), apply offline, bump the date, re-sync to each tool. Skipping this is how files go stale and thread thinking gets lost.
 
-**Imported / extracted context is draft source material, not truth.** Context pulled in from another AI tool, an old chat, a memory export, or a document is *evidence*, not canon — it may be partial, stale, inferred, or contradictory. Before any of it lands in a file, confirm the uncertain, sensitive, contradictory, inferred, or single-source items. It becomes canonical only after you review it: the tool proposes, you approve.
+**Imported / extracted context is draft source material, not truth.** Context pulled in from another AI tool, an old chat, a memory export, or a document is *evidence*, not canon — it may be partial, stale, inferred, or contradictory. Before any of it lands in a file, confirm the uncertain, sensitive, contradictory, inferred, or single-source items. It becomes canonical only after you review it: the tool proposes, you approve. **Synthesis is not validation** — organizing sources into a clean draft is not the same as confirming it; agreement across sources is evidence, not proof.
 
 ---
 

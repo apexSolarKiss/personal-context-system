@@ -162,7 +162,11 @@ Where the tool allows it, look at what context/memory already exists before you 
 - If yes, keep it to **one or two high-signal sources** to start (the thread or doc that knows them best), not an exhaustive sweep. More can come later.
 - **Source is here** (uploaded/pasted): read only what they share.
 - **Source is in another tool/thread:** don't try to reach it yourself. Generate a **short extraction prompt on the spot**, adapted to their source and comfort — not a fixed script. A serviceable seed to adapt: *"Extract durable context about me from this source for a personal context system — stable facts, preferences, how I like to be communicated with, goals, recurring projects, and anything sensitive to handle carefully. Skip generic filler. Mark anything you're inferring or unsure about. Output concise Markdown."* Have them bring the result back here.
-- **Treat whatever comes back as draft source material, not truth.** Before it lands in any file, surface anything **uncertain, sensitive, contradictory, inferred, or single-source** for the user to confirm. They approve what becomes canonical.
+- **Synthesis is not validation.** Treat whatever comes back as **draft source material, not truth** — multiple sources agreeing makes a claim a stronger *candidate*, but nothing is canonical until the user confirms it. Before writing any of it into the generated files, pause and show the user a short validation list, and write only the confirmed items:
+    - **Ready to keep** — stable, low-risk, well-supported.
+    - **Confirm first** — single-source, inferred, uncertain, sensitive, or high-impact.
+    - **Resolve** — contradictions or tensions between sources.
+    - **Leave out** — anything they don't want in durable context.
 
 ---
 
@@ -669,7 +673,7 @@ When new information arrives, ask:
 
 **End-of-thread habit:** at the end of a substantive conversation, ask the AI *"what new content should be added to which file? Propose specific edits."* Review (you are the source of truth), apply offline, bump the date, re-sync to each tool. Skipping this is how files go stale and thread thinking gets lost.
 
-**Imported / extracted context is draft source material, not truth.** Context pulled in from another AI tool, an old chat, a memory export, or a document is *evidence*, not canon — it may be partial, stale, inferred, or contradictory. Before any of it lands in a file, confirm the uncertain, sensitive, contradictory, inferred, or single-source items. It becomes canonical only after you review it: the tool proposes, you approve.
+**Imported / extracted context is draft source material, not truth.** Context pulled in from another AI tool, an old chat, a memory export, or a document is *evidence*, not canon — it may be partial, stale, inferred, or contradictory. Before any of it lands in a file, confirm the uncertain, sensitive, contradictory, inferred, or single-source items. It becomes canonical only after you review it: the tool proposes, you approve. **Synthesis is not validation** — organizing sources into a clean draft is not the same as confirming it; agreement across sources is evidence, not proof.
 
 ---
 
@@ -765,7 +769,7 @@ Repeat step 3 for each tool you use. The files are identical across tools.
 
 Two things you can layer on later — both optional, neither required for the system to work:
 
-- **Import existing context.** If you already have useful context about yourself in another AI tool, an old chat, an exported memory, or a document, you can fold it in instead of starting from scratch. Point the setup (or any later "update my context" conversation) at **one or two high-signal sources**; it will help you extract and consolidate them. Treat whatever comes out as a **draft** — you review and approve what actually lands in your files. Your files are canonical only after you've okayed the content.
+- **Import existing context.** If you already have useful context about yourself in another AI tool, an old chat, an exported memory, or a document, you can fold it in instead of starting from scratch. Point the setup (or any later "update my context" conversation) at **one or two high-signal sources**; it will help you extract and consolidate them. Treat whatever comes out as a **draft** — you review and approve what actually lands in your files. Your files are canonical only after you've okayed the content. Agreement across sources is evidence, not proof — your review is the validation step (*synthesis is not validation*).
 - **Global behavior preferences.** The project instructions make a tool behave right *inside your project*. If you also want it to treat you consistently *everywhere* in that tool, paste a short **behavior-only** block — tone, formatting, pushback style, outbound-comms default, and *files win over memory* — into the tool's global custom-instructions/preferences area. Derive it from `identity-and-voice.md` and regenerate it when that file changes; **keep life facts out of it** (facts stay in your files). The setup guide can produce this block for you.
 
 ---
