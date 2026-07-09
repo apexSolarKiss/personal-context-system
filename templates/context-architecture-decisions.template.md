@@ -24,7 +24,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.0)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.1)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -70,6 +70,8 @@ Durable context lives in three tiers with different reliability properties acros
 **Quick test:** *would I want the AI to apply this in every conversation, even one about cooking or code?* If no, it's a file, not an always-on preference.
 
 *(Advanced: in tools with a dedicated memory API — e.g. Claude's `memory_user_edits` — tier 1 maps onto that feature.)*
+
+**Installing tier 1 (optional).** Where a tool has an always-on custom-instructions/preferences field, you can install a short **behavior-only** block there so it treats you consistently *across the whole tool*, not only inside one project. Derive it from `identity-and-voice.md` (tone, formatting, push-vs-accept, outbound default, and *files win over memory*), keep it **behavior-only — no life facts**, and regenerate it when `identity-and-voice.md` changes rather than maintaining a second source. It is a *derived* paste-in, not a new canonical file.
 
 ### Connector-backed canonicals (optional refinement of tier 2)
 
@@ -195,6 +197,8 @@ When new information arrives, ask:
 4. **If unsure → default to a file.** Always-on preferences are the more limited resource.
 
 **End-of-thread habit:** at the end of a substantive conversation, ask the AI *"what new content should be added to which file? Propose specific edits."* Review (you are the source of truth), apply offline, bump the date, re-sync to each tool. Skipping this is how files go stale and thread thinking gets lost.
+
+**Imported / extracted context is draft source material, not truth.** Context pulled in from another AI tool, an old chat, a memory export, or a document is *evidence*, not canon — it may be partial, stale, inferred, or contradictory. Before any of it lands in a file, confirm the uncertain, sensitive, contradictory, inferred, or single-source items. It becomes canonical only after you review it: the tool proposes, you approve.
 
 ---
 
