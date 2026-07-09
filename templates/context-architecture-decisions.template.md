@@ -24,7 +24,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.4.2)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -70,6 +70,16 @@ Durable context lives in three tiers with different reliability properties acros
 **Quick test:** *would I want the AI to apply this in every conversation, even one about cooking or code?* If no, it's a file, not an always-on preference.
 
 *(Advanced: in tools with a dedicated memory API — e.g. Claude's `memory_user_edits` — tier 1 maps onto that feature.)*
+
+### Connector-backed canonicals (optional refinement of tier 2)
+
+Tier 2 says the load-bearing files live "in the tool's project/sources + an offline copy you own." Those two copies can collapse into **one live copy** when your AI tool can connect to your storage.
+
+A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), and any uploaded copy is a mirror or fallback, not the source of truth.
+
+**The index owns the read path.** The AI reads the exact canonical locators named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact locators, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
+
+The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface; the files stay in the storage you own — mount the map, not the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
 
 ---
 
@@ -160,6 +170,7 @@ When memory, files, and conversation disagree:
 1. **A file wins over always-on preferences.** Files are your maintained source of truth; built-in preferences/memory are lossy behavioral compression.
 2. **The most recent dated copy wins.** If two copies drift, the newer timestamp is authoritative.
 3. **The in-file header wins over the filename.** The header is what the AI reads.
+4. **A connector-read canonical wins over an uploaded project copy.** In cloud-connector mode, the live file the connector returns beats a possibly-stale mirror uploaded into the project.
 
 ---
 

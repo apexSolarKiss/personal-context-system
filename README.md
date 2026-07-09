@@ -55,8 +55,19 @@ The entry action is the same across tools: provide the setup prompt. What differ
 | **ChatGPT** / chat-only tools | Attach/upload `SETUP-PROMPT.md`, or paste the full contents if upload is unavailable | Interviews you and returns generated files as downloads or one labeled file at a time |
 | **Claude.ai / Grok** | Attach/upload `SETUP-PROMPT.md`, or use `BOOTSTRAP-PROMPT.md` if URL fetch works | Fetches the pinned setup prompt when possible; otherwise asks for upload/paste |
 | **Claude Code / Codex** | Start a session in a safe workspace folder and provide `SETUP-PROMPT.md` or `BOOTSTRAP-PROMPT.md` | Detects the working folder, clones the scaffold only if useful, keeps scaffold and private folders separate, and writes files to disk |
+| **Connector-capable chat/project tools** (a Dropbox/Drive connector on your plan) | Same entry as above, then *optionally* keep canonicals in cloud storage and give the project just `_BOOTSTRAP.md` + `_INDEX.md` | Sets up the index with canonical locators; the tool then reads those exact locators live through the connector, and asks for upload/paste if connector access fails |
 
 Attach/upload of the one self-contained `SETUP-PROMPT.md` is the supported floor everywhere; URL fetch and clone are conveniences on top, never prerequisites. In standard ChatGPT setup in particular, do not depend on URL fetching, repo traversal, or a GitHub connector.
+
+---
+
+## Connector-backed canonical folder (optional)
+
+If your AI tool can connect to cloud storage such as Dropbox or Google Drive, you can keep your context files in that cloud folder and use `_INDEX.md` as the stable map to those live files.
+
+In that mode the AI project doesn't store every canonical file as an uploaded copy. It holds the bootstrap and index (`_BOOTSTRAP.md` + `_INDEX.md`); at the start of a conversation the AI reads `_BOOTSTRAP.md` → `_INDEX.md`, then fetches the relevant live files through the connector by exact connector locator. The canonicals stay in the storage you own and never go stale inside a project — **mount the map, not the canonicals.**
+
+If the connector is unavailable, blocked, or missing from your tool or plan, fall back to uploading the relevant files (or the self-contained setup prompt). Don't let the AI guess from memory. **Connector mode is optional; the upload floor above always works.**
 
 ---
 
@@ -127,7 +138,7 @@ Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, 
 
 For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
-**This release:** `v0.4.2` — adds a durability convention to the generated system: *Persisting durable artifacts (routed export)*. On finalize/lock/approve, the AI routes the artifact to its canonical home and checks that home before writing (no reflex duplicates), and — with filesystem access — snapshots before overwriting where the system defines an archive folder (Git history serves repo files). Lands in the ADR and `_BOOTSTRAP` templates. The `v0.4.2` tag is cut on this release's merge commit and `stable` is fast-forwarded to it; pin to a version tag explicitly for reproducible use.
+**This release:** `v0.5.0` — adds an optional deployment mode: *connector-backed canonical storage*. If your AI tool exposes a connector to cloud storage (Dropbox, Google Drive, or similar), you can keep your canonical files there and mount only the map — `_BOOTSTRAP.md` + `_INDEX.md` — into the AI project; the tool then reads the live files by exact connector locator through the connector. The self-contained `SETUP-PROMPT.md` upload/paste flow remains the universal floor; connector mode is an upgrade, never a prerequisite. Lands in the `_INDEX`, `_BOOTSTRAP`, ADR, project-instructions, and owner-manual templates (and their `SETUP-PROMPT.md` appendix mirrors). The `v0.5.0` tag is cut on this release's merge commit and `stable` is fast-forwarded to it; pin to a version tag explicitly for reproducible use.
 
 ---
 
