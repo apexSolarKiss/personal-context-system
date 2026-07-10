@@ -85,10 +85,38 @@ prove you can see the templates → greet (branched) → ask consent
   ├─ no  ⇒ bow out lightly ("go make some art")
   └─ yes ⇒ figure out your capability → set up paths/labels → interview
            → generate the system → generate paste-in instructions
+           → deliver the complete bundle (real files / downloads / full Markdown), not a drip
            → guide install/upload into their AI tool(s)
 ```
 
 Everything below is the "yes" branch.
+
+---
+
+## The delivery contract (deliver the whole system, not a description of it)
+
+This is the output-side bookend to the Step 0 capability gate. Step 0 proved you can *see* the templates; this governs whether you actually *deliver* the user's files. **A setup that describes the files — or dribbles them out one at a time until a passive user drifts away — has failed, even if every word is right.** Hold this from here to the very end.
+
+**Deliver the complete required bundle in as few messages as possible** — as real files (filesystem-capable), as real downloadable artifacts or a single zip (chat-only, if your tool can make them), or as full Markdown blocks emitted together (chat-only, no downloads). Not a drip, not a plan, not a summary. The batched chat-only mechanics are in Step 7.
+
+**Required bundle — none of it optional:**
+
+1. `identity-and-voice.md`
+2. every domain file the interview called for (one per domain the user asked to hold)
+3. `_BOOTSTRAP.md`
+4. `_INDEX.md`
+5. `context-architecture-decisions.md`
+6. `how-to-use-this-system.md`
+7. the project-instructions paste-in text (generated in Step 8)
+
+**What counts as delivered — and what does not:**
+
+- **Filesystem-capable:** the file is written into the private destination folder and you can name its real path.
+- **Chat-only, downloads available:** it is attached or created as a real downloadable file (or part of a single zip), with its exact filename listed.
+- **Chat-only, no downloads:** its **full Markdown contents** are emitted in the chat, each labeled with its exact target filename (batched — see Step 7), where the user can copy and save them.
+- **These do NOT count:** a prose description of a file; a filename in a summary or in `_INDEX.md`; "I've prepared…", "ready to save", "you can now create…"; or a file promised for a later turn that never arrives. **If the bytes don't exist where the user can get them, the file is not delivered.**
+
+Before install (Step 8), audit the bundle against this list and emit anything still missing. Don't tell the user the system is ready while any required file is undelivered.
 
 ---
 
@@ -109,7 +137,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.5.1 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.5.2 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -195,20 +223,25 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.5.1` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.5.2` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.5.1 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.5.2 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Now write the output, branched by capability:**
 
 - **Filesystem-capable:** write the files directly into the **private destination** folder (Path A). Never into the clone.
 - **Chat-only:** you can't write to disk, so hand the files back to be saved — and do it humanely:
-  - **Prefer downloadable files** (or a single **zip**) if your tool supports producing them. That's the nicest UX.
-  - **Otherwise, output ONE file at a time**, each clearly labeled with its **target filename**, and **pause after each** so the user can save it before you send the next. **Never dump all the files in one giant wall-of-text response.**
+  - **Prefer real downloadable files** — a single **zip**, or individual downloadable `.md` files — if your tool can produce them. List every exact filename. That's the best UX and the cleanest proof the files exist.
+  - **If downloads aren't available, emit the complete bundle as Markdown in one response** (or as few as possible) — each file its own fenced block, labeled with its exact target filename. **Do not** default to one-file-at-a-time with a pause after each: that slow drip is exactly what strands a passive user with a half-built system. If the whole bundle genuinely won't fit in one response, split it into **`PART 1 of N`, `PART 2 of N`, …**, and:
+    - each part carries the **complete contents** of the files it covers — never a partial or a merely described file;
+    - **continue automatically to the next part** unless the platform forces you to stop — do not wait for the user between parts;
+    - at the end of each part, list **only** the files already emitted and the files still missing;
+    - **do not ask the user to save or confirm after each file** unless they explicitly ask for step-by-step saving.
   - Tell the user exactly where to save each file (the folder from Step 3, Path B).
   - **Coach the actual save**, or the files won't land right: each must be saved as a plain-text `.md` file with its **exact name** — including leading underscores (`_BOOTSTRAP.md`, `_INDEX.md`) and the `.md` extension. Say plainly that pasting into a Google Doc or Word doc is **not** the same as saving a `.md` file. On Google Drive, the reliable path is to save the text as a `.md` file in a plain-text editor and then **upload** it — not "New → Google Doc." (This is the strongest reason to prefer the zip when you can produce one.)
+  - **Saving is the user's action, not yours — never claim a save you did not perform.** An *offer* to "save these to your Google Drive / Dropbox / cloud for you" is **not** evidence you can write there. Do not say files are saved, uploaded, or synced to any cloud storage unless an actual save action completed and returned a **visible file, folder path, or link the user can open and inspect.** If you can't verify that, don't claim it — produce the downloadable files (or a zip), or the full Markdown contents, and guide the user to save them by hand. (This is the write-side twin of the connector-*read* honesty rule: never claim a cloud read the connector didn't return; never claim a cloud write the tool didn't complete.)
 
 ---
 
@@ -219,6 +252,18 @@ Two artifacts, then a handoff:
 1. **The paste-in instruction.** Generate the short text from the **project-instructions** template (Appendix) — the ~50-word block that goes into each tool's "Project instructions" / "Custom instructions" field, telling the AI to read `_BOOTSTRAP.md` first every conversation. This is what makes the system invoke itself.
 2. **The canonical files** — already generated in Step 7.
 
+**Completion audit — run this before you guide the install. Tie it to artifacts, not to words.** For each required output, mark how it was *actually delivered* (per the delivery contract near the top) — not whether you *plan* to deliver it:
+
+- `identity-and-voice.md` — downloadable file · full Markdown block · **MISSING**
+- every domain file (work / family / health / …) — downloadable · full Markdown · **MISSING**
+- `_BOOTSTRAP.md` — downloadable · full Markdown · **MISSING**
+- `_INDEX.md` — downloadable · full Markdown · **MISSING**
+- `context-architecture-decisions.md` — downloadable · full Markdown · **MISSING**
+- `how-to-use-this-system.md` — downloadable · full Markdown · **MISSING**
+- project-instructions paste-in — provided verbatim · **MISSING**
+
+**Any output marked MISSING: generate it now, before install guidance.** A file that is only named, described, or promised for later counts as MISSING. Move on only once every row is delivered.
+
 Then **guide** the user to install them — and here is where you stay honest (Step 0): you can't do this step *for* them across a tool boundary. So walk them through it:
 
 - **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
@@ -227,6 +272,8 @@ Then **guide** the user to install them — and here is where you stay honest (S
 - **Optional — a global behavior-preferences block.** The project instructions above make the tool behave right *inside this project*. If the user also wants it to treat them consistently *everywhere* in that tool, offer to generate a short **behavior-only** block for the tool's always-on custom-instructions/preferences area — tone, formatting, what to push on vs. accept, outbound-comms default, and the source-of-truth rule (*durable facts live in my files; if memory conflicts with a file, the file wins*). **Behavior only — no life facts** (those stay in the files). It's a *derived* paste-in, not a new canonical file: when `identity-and-voice.md` changes, regenerate it rather than editing it as a separate source. Name the install surface generically — settings move — e.g. *"wherever your tool keeps custom instructions or preferences."* If the tool has no such field, keep the block and paste it at the start of chats where you want these behavior defaults active.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
+
+**Terminal state — the bundle is delivered, not just described.** On the **filesystem path**, the generated files exist in the private destination folder and the paste-in is installed or handed over. On the **chat-only path**, the user has the whole required bundle **in hand** — as downloadable artifacts (or a zip) or as full Markdown blocks — **plus** the project-instructions paste-in, and the completion audit above shows no `MISSING` rows. A session that ends with any required file still only described, or deferred to a "next" turn that never came, has **not** completed setup, however polished the closing summary reads. Only once the bundle is genuinely delivered:
 
 Then you're done — for now. The next time they open a conversation in any of those tools, the AI reads the bootstrap and already knows them. And because the bootstrap carries a **maintenance mode**, that same conversation can keep their context *current* over time — they just say "update my context" — not only recall it. The interface doesn't die when this setup session ends.
 
@@ -238,7 +285,7 @@ Then you're done — for now. The next time they open a conversation in any of t
 - "Do u want to setup" stays — capital D, keep the "u". The texting register is deliberate.
 - The no-path joke ("Then go make some art.") stays.
 - Tighten freely. Do **not** flatten it into generic onboarding copy.
-- The truths that must survive any tightening: **(1)** on the filesystem path, private context goes to a separate folder, never the clone, never committed; **(2)** you generate + guide, you don't claim to auto-install into another tool's UI; **(3)** you prove you can see the templates before you promise to build anything; **(4)** you don't claim a repo connection you don't have.
+- The truths that must survive any tightening: **(1)** on the filesystem path, private context goes to a separate folder, never the clone, never committed; **(2)** you generate + guide, you don't claim to auto-install into another tool's UI; **(3)** you prove you can see the templates before you promise to build anything; **(4)** you don't claim a repo connection you don't have; **(5)** you deliver the complete file bundle as real artifacts — downloads, or full Markdown emitted together (not a one-at-a-time drip), or written to disk — never a description or a promise of files for later.
 
 ---
 
@@ -499,7 +546,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.1)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.2)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
