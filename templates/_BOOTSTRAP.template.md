@@ -20,6 +20,7 @@ Read this first in any new conversation in this project. It directs you to the r
 - **Connector-backed canonicals (if `_INDEX.md` declares them).** If the index lists cloud-connector canonical locators, fetch the relevant live files by **exact connector locator** through the available connector before substantive work — the live file is the source of truth, not any uploaded copy. If the connector is unavailable or a locator fails, say so and ask the user to upload or paste that file; don't fall back to memory or a stale project copy. **Never claim you read a cloud file unless the connector actually returned it.**
 - **Apply the voice + style conventions** in `{{VOICE_FILE}}` (e.g. `identity-and-voice.md`). [example: tone, formatting conventions, what to challenge vs. accept, how to handle outbound communication]
 - **Distinguish tool facts from reader instructions.** Tool-specific behavior names the tool; instructions telling you what to do are written tool-agnostically (imperative or "the AI") so the same files work in any tool. See the ADR.
+- **Use explicit artifact-lifecycle verbs.** Do not use `cut` for creating, revising, saving, snapshotting, routing, superseding, retiring, or deleting drafts, files, versions, changes, or handoffs. Name the actual operation.
 
 ---
 
