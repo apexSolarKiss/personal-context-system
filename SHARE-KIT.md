@@ -37,7 +37,7 @@ If you cannot open URLs, say exactly: "I can't open URLs from here, so this boot
 ## Bubble 3 // re-orient — tell the human what to do with it
 
 ```
-☝️ The ENTIRE MESSAGE BUBBLE above is the prompt — not just the link inside it. Copy/paste the whole bubble, every line, into your AI tool as one message. You don't need to read or understand it; just answer the questions your AI asks.
+☝️ The entire MESSAGE BUBBLE above IS the prompt — not just the link inside it. Copy/paste the whole bubble, every line, into your AI tool as one message. You don't need to read or understand it; just answer the questions your AI asks.
 
 One catch: ChatGPT often can't open links. If it says it can't grab the file, open the repo yourself, open SETUP-PROMPT.md, and copy/paste that entire file into the same chat instead:
 
