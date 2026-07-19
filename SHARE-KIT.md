@@ -11,12 +11,13 @@ Your AI memory shouldn't be locked to whatever product happens to render it — 
 
 So I built a small open-source tool for it: a file-first personal context system you own. Plain Markdown files that move across tools instead of being trapped in one product's memory.
 
-You don't need GitHub or any setup. Just copy the prompt in my next message into ChatGPT, Claude, or Gemini — it'll interview you and build your system from there.
+You don't need GitHub or any setup. My next message bubble is the prompt. Copy and paste the ENTIRE next message bubble (every line, including the link and the instructions around it) into ChatGPT, Claude, or Gemini. Do not copy only the link.
 
-Memory should be personal infrastructure, not a product feature.
-💜
+Your AI tool will then interview you and build your system from there.
 
-👇 the prompt's in the next message — copy/paste it in
+Memory should be personal infrastructure, not a product feature. 💜
+
+👇 The following message bubble IS the prompt, verbatim. Copy/paste the ENTIRE BUBBLE into your AI tool — every line, not just the link.
 ```
 
 ## Bubble 2 // the prompt — send this one alone
@@ -36,9 +37,9 @@ If you cannot open URLs, say exactly: "I can't open URLs from here, so this boot
 ## Bubble 3 // re-orient — tell the human what to do with it
 
 ```
-☝️ That's the prompt — you don't need to read or understand it, just paste it into your AI tool and answer the questions it asks.
+☝️ The ENTIRE MESSAGE BUBBLE above is the prompt — not just the link inside it. Copy/paste the whole bubble, every line, into your AI tool as one message. You don't need to read or understand it; just answer the questions your AI asks.
 
-One catch: ChatGPT often can't open links. If it says it can't grab the file, open the repo and copy/paste the full self-contained SETUP-PROMPT.md instead:
+One catch: ChatGPT often can't open links. If it says it can't grab the file, open the repo yourself, open SETUP-PROMPT.md, and copy/paste that entire file into the same chat instead:
 
 github.com/apexSolarKiss/personal-context-system
 ```
@@ -48,5 +49,5 @@ github.com/apexSolarKiss/personal-context-system
 ## Why three bubbles
 
 - **Bubble 2 is isolated on purpose** — a recipient can long-press-copy the prompt without grabbing surrounding prose. The isolation is functional, not stylistic.
-- **Bubble 3 re-orients the human** — it says the prompt block is not for them to read, only to paste, and it delivers the ChatGPT-can't-open-URLs fallback at the point of action.
+- **Bubble 3 re-orients the human** — it says the entire Bubble 2 message—not just the link inside it—is not for them to read, only to paste, and it delivers the ChatGPT-can't-open-URLs fallback at the point of action. The whole-bubble instruction is deliberately stated in both Bubble 1 and Bubble 3; the redundancy is functional, not accidental.
 - **The repo is demoted to source + fallback**, not foregrounded as the entry point. The chat share is the interface for most people.
