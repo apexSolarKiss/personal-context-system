@@ -18,7 +18,7 @@ At the start of every conversation in this project, read _BOOTSTRAP.md from the 
 **Cloud-connector mode — add this line only** if your canonicals live in Dropbox/Drive and this tool has a connector to them:
 
 ```
-If _INDEX.md lists connector-backed canonical locators, read those live files by exact locator through the connector before substantive work; if the connector fails or a locator is missing, say so and ask me to upload or paste that file — don't guess from memory.
+Follow the exact _INDEX.md locator that _BOOTSTRAP.md declares: fetch _INDEX.md live by that locator (do not assume the index is already mounted), then read the live canonicals it names by exact locator before substantive work; if the connector fails or a locator is missing, say which one and ask me to upload or paste that file — don't guess from memory.
 ```
 
 ---

@@ -24,7 +24,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.3)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.6.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -77,11 +77,19 @@ Durable context lives in three tiers with different reliability properties acros
 
 Tier 2 says the load-bearing files live "in the tool's project/sources + an offline copy you own." Those two copies can collapse into **one live copy** when your AI tool can connect to your storage.
 
-A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), and any uploaded copy is a mirror or fallback, not the source of truth.
+A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project standing-mounts only `_BOOTSTRAP.md` (which carries the `_INDEX.md` locator), fetches `_INDEX.md` and the canonicals live, and any uploaded copy is a mirror or fallback, not the source of truth.
 
 **The index owns the read path.** The AI reads the exact canonical locators named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact locators, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
 
-The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface; the files stay in the storage you own — mount the map, not the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
+The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface — the bootstrap — while the index and the files stay in the storage you own: mount the entry point; fetch the map; fetch the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
+
+**Four operating modes.**
+1. *Healthy cloud connector* — standing-mount `_BOOTSTRAP.md` only; it carries the exact `_INDEX.md` locator; fetch the index then the canonicals live; a connector read overrides any stale supplied copy.
+2. *Temporary connector failure* — keep the bootstrap mounted; name the exact failed locator; ask for a current temporary copy; resume the live route on recovery; remove the temporary index after; never guess from memory.
+3. *No connector by design* — the bootstrap-only rule does not apply; upload or supply `_BOOTSTRAP.md` + `_INDEX.md` + the applicable topic files; the index remains required; the upload floor stays fully supported.
+4. *Filesystem-capable* — read `_BOOTSTRAP.md`, `_INDEX.md`, and the canonicals directly from the private folder; no project-mount architecture is required.
+
+A non-Markdown standing mount may remain only where a demonstrated tool or connector limitation requires it — explicit, narrow, evidence-based — and it does not restore the index as a standing mount.
 
 ---
 

@@ -137,7 +137,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.5.3 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.6.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -164,7 +164,7 @@ You can't write to disk, so there's nothing to "clone" and no two-folder trap to
 
 Say plainly: *"You're on a chat-only tool, so there's no repo to clone and nothing to install on disk from my side — I'll generate your files and you save them into a folder you own."* Then continue.
 
-**Optional — connector mode (only where the tool actually connects to that storage).** If they'll keep the canonical files in Dropbox / Google Drive / similar *and* their AI tool exposes a connector to it, they don't have to upload full copies into every project. They can mount just the map — `_BOOTSTRAP.md` + `_INDEX.md` with the canonical locators filled in — and let the tool read the live files through the connector. Offer this **only where the connector genuinely exists**; if it doesn't, the upload floor is the path, no apology needed. Either way the interview and generation are identical — connector mode only changes what gets mounted versus read live, which you handle at install (Step 8).
+**Optional — connector mode (only where the tool actually connects to that storage).** If they'll keep the canonical files in Dropbox / Google Drive / similar *and* their AI tool exposes a connector to it, they don't have to upload full copies into every project. They can mount just the entry point — `_BOOTSTRAP.md`, carrying the exact `_INDEX.md` locator — and let the tool fetch the index live, then read the live canonicals through the connector. Offer this **only where the connector genuinely exists**; if it doesn't, the upload floor is the path, no apology needed. Either way the interview and generation are identical — connector mode only changes what gets mounted versus read live, which you handle at install (Step 8).
 
 ---
 
@@ -223,11 +223,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.5.3` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.6.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.5.3 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.6.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Now write the output, branched by capability:**
 
@@ -268,7 +268,7 @@ Then **guide** the user to install them — and here is where you stay honest (S
 
 - **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
 - **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does. Two honest paths remain: (a) paste the instruction text into the tool's **always-on custom-instructions** field, which applies to every chat (in ChatGPT: **Settings → Personalization → Custom instructions**), and keep the context files somewhere you can attach them; or (b) as the simplest floor, **upload the context files and paste the instruction at the start of a chat** whenever they want the system active. Tell them plainly which their tool supports — never promise a projects feature they may not have.
-- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` and `_INDEX.md` — with the canonical connector locators (a path, file URL, or file ID, depending on the connector) filled into the index — and paste the instruction. The tool reads the live canonical files through the connector on demand. Fill in the `## Connector read protocol` in `_INDEX.md` so it reads exact locators, and add the optional connector line from `project-instructions.md`. **Fill connector locators only after the user has confirmed the exact cloud folder/path, file URL, or file ID** — if the exact locator isn't known yet (e.g. the files aren't saved into the cloud folder yet), leave a clear placeholder in `_INDEX.md` and tell the user to replace it after saving the files, before relying on connector mode. If a locator ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
+- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` — with the exact `_INDEX.md` connector locator (a path, file URL, or file ID, depending on the connector) written into it — and paste the instruction. The tool fetches `_INDEX.md` live by that locator, then reads the live canonicals the index declares, on demand. **Connector-mode setup is not complete until the exact `_INDEX.md` locator is known and written into `_BOOTSTRAP.md`.** Populate the topic-canonical locators in `_INDEX.md`'s file list; retain the generated `## Connector read protocol`; and add the optional connector line from `project-instructions.md`. The `_INDEX.md` locator itself belongs only in `_BOOTSTRAP.md`. If the index locator is not yet known, leave `INDEX_CANONICAL_LOCATOR` as an explicit placeholder and do not rely on connector mode. If a topic-file locator is unknown, leave that specific file-list locator as a placeholder. If a locator ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
 - **Optional — a global behavior-preferences block.** The project instructions above make the tool behave right *inside this project*. If the user also wants it to treat them consistently *everywhere* in that tool, offer to generate a short **behavior-only** block for the tool's always-on custom-instructions/preferences area — tone, formatting, what to push on vs. accept, outbound-comms default, and the source-of-truth rule (*durable facts live in my files; if memory conflicts with a file, the file wins*). **Behavior only — no life facts** (those stay in the files). It's a *derived* paste-in, not a new canonical file: when `identity-and-voice.md` changes, regenerate it rather than editing it as a separate source. Name the install surface generically — settings move — e.g. *"wherever your tool keeps custom instructions or preferences."* If the tool has no such field, keep the block and paste it at the start of chats where you want these behavior defaults active.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
@@ -378,11 +378,18 @@ When something changes, edit here and bump the date above.
 
 Read this first in any new conversation in this project. It directs you to the rest of the system.
 
+**Index locator (healthy connector mode).** In cloud-connector mode this bootstrap is the sole standing Markdown mount, and it carries the exact locator for the live `_INDEX.md`:
+
+    INDEX_CANONICAL_LOCATOR: {{INDEX_CANONICAL_LOCATOR}}
+    # connector path | file URL | connector file ID — filled at install; required for connector mode
+
+Connector-mode setup is not complete until this locator is filled. In no-connector or filesystem mode, leave it blank and read `_INDEX.md` as a project or local file.
+
 ---
 
 ## Read order
 
-1. **`_INDEX.md`** // the master file map + retrieval protocol. Tells you which file covers which domain and when to pull which file for which kind of request.
+1. **`_INDEX.md`** // the master file map + retrieval protocol. **Read or fetch it according to the active storage mode:** in healthy connector mode, fetch it live at `INDEX_CANONICAL_LOCATOR` — do not assume it is mounted; in no-connector or filesystem mode, read the project or local copy. It tells you which file covers which domain and when to pull which file.
 2. **`context-architecture-decisions.md`** // the ADR. Read this if you need to understand *why* the system is structured this way — the storage tiers, the source-of-truth hierarchy, and the file convention.
 3. **Topic-specific files** as directed by `_INDEX.md` for the current request.
 
@@ -391,7 +398,7 @@ Read this first in any new conversation in this project. It directs you to the r
 ## Core rules
 
 - **Files are source of truth.** If something in conversation conflicts with a file, surface the conflict; don't silently smooth it over.
-- **Connector-backed canonicals (if `_INDEX.md` declares them).** If the index lists cloud-connector canonical locators, fetch the relevant live files by **exact connector locator** through the available connector before substantive work — the live file is the source of truth, not any uploaded copy. If the connector is unavailable or a locator fails, say so and ask the user to upload or paste that file; don't fall back to memory or a stale project copy. **Never claim you read a cloud file unless the connector actually returned it.**
+- **Connector-backed canonicals — bootstrap-only standing mount (healthy connector mode).** `_BOOTSTRAP.md` is the sole standing Markdown mount. Fetch `_INDEX.md` live at `INDEX_CANONICAL_LOCATOR` before substantive work, then fetch the relevant topic canonicals by the **exact connector locators** the index declares — the live file is the source of truth, not any uploaded copy. Do **not** broad-search cloud storage for the index, and do **not** rely on a stale, permanently-mounted index. If the connector is unavailable or a locator fails, name the exact failed locator and ask the user for a current copy; don't fall back to memory or a stale project copy. **Never claim you read a cloud file unless the connector actually returned it.**
 - **Apply the voice + style conventions** in `{{VOICE_FILE}}` (e.g. `identity-and-voice.md`). [example: tone, formatting conventions, what to challenge vs. accept, how to handle outbound communication]
 - **Distinguish tool facts from reader instructions.** Tool-specific behavior names the tool; instructions telling you what to do are written tool-agnostically (imperative or "the AI") so the same files work in any tool. See the ADR.
 - **Use explicit artifact-lifecycle verbs.** Do not use `cut` for creating, revising, saving, snapshotting, routing, superseding, retiring, or deleting drafts, files, versions, changes, or handoffs. Name the actual operation.
@@ -451,14 +458,14 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 Where your canonical files actually live — one of these is true for you:
 
 - **Local-folder canonical** — the files live in a folder you own on disk; a filesystem-capable tool reads them there directly.
-- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The locators in the file list below are the **canonical locators** (a path, file URL, or file ID, depending on the connector), and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
+- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The locators in the file list below are the **canonical locators** (a path, file URL, or file ID, depending on the connector), and the tool reads the live files through the connector. The AI project then standing-mounts only `_BOOTSTRAP.md` (which carries the `_INDEX.md` locator); `_INDEX.md` itself and the canonicals are fetched live, not held as permanent mounts.
 - **Project-file mirror** — the files uploaded into the AI project are **copies**. If a local or cloud canonical also exists, the canonical wins and the upload is a fallback that can go stale.
 
 This is optional. With no connector and no separate canonical folder, the uploaded project files simply *are* your working copy — the universal floor. Connector mode is an upgrade, not a requirement.
 
 ## Connector read protocol
 
-Applies only in **cloud-connector** mode:
+**Three states.** In **healthy connector mode**, `_INDEX.md` is fetched live at the locator the bootstrap declares — it is not a standing mount — and it then routes the canonicals live. In **temporary connector failure**, name the exact failed locator, ask the user for a current point-in-time copy, resume the live route on recovery, and remove the temporary copy afterward. In **no-connector** mode, the uploaded project files (the index included) are the working set — the upload floor. The numbered steps below apply in cloud-connector mode:
 
 1. **Read the exact connector locators** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
 2. **Fetch the relevant live files through the connector** before substantive work — the same read order the bootstrap directs, sourced live.
@@ -547,7 +554,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.5.3)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.6.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -600,11 +607,19 @@ Durable context lives in three tiers with different reliability properties acros
 
 Tier 2 says the load-bearing files live "in the tool's project/sources + an offline copy you own." Those two copies can collapse into **one live copy** when your AI tool can connect to your storage.
 
-A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), and any uploaded copy is a mirror or fallback, not the source of truth.
+A context file may live outside the AI project — in Dropbox, Google Drive, or another service the tool reaches through a connector. Then the **cloud file is the canonical file**; the AI project standing-mounts only `_BOOTSTRAP.md` (which carries the `_INDEX.md` locator), fetches `_INDEX.md` and the canonicals live, and any uploaded copy is a mirror or fallback, not the source of truth.
 
 **The index owns the read path.** The AI reads the exact canonical locators named in `_INDEX.md`, fetches only those files, and reports a connector failure instead of guessing from memory — exact locators, not a broad search of your storage. A connector read is *verification*, not write authority: edits still flow back through the maintenance loop unless the tool explicitly supports writes and you ask for them.
 
-The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface; the files stay in the storage you own — mount the map, not the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
+The gain: canonicals don't go stale inside each AI project. The project gets a stable entry surface — the bootstrap — while the index and the files stay in the storage you own: mount the entry point; fetch the map; fetch the canonicals. Optional: with no connector, tier 2 stays exactly as above (project copies + your offline folder).
+
+**Four operating modes.**
+1. *Healthy cloud connector* — standing-mount `_BOOTSTRAP.md` only; it carries the exact `_INDEX.md` locator; fetch the index then the canonicals live; a connector read overrides any stale supplied copy.
+2. *Temporary connector failure* — keep the bootstrap mounted; name the exact failed locator; ask for a current temporary copy; resume the live route on recovery; remove the temporary index after; never guess from memory.
+3. *No connector by design* — the bootstrap-only rule does not apply; upload or supply `_BOOTSTRAP.md` + `_INDEX.md` + the applicable topic files; the index remains required; the upload floor stays fully supported.
+4. *Filesystem-capable* — read `_BOOTSTRAP.md`, `_INDEX.md`, and the canonicals directly from the private folder; no project-mount architecture is required.
+
+A non-Markdown standing mount may remain only where a demonstrated tool or connector limitation requires it — explicit, narrow, evidence-based — and it does not restore the index as a standing mount.
 
 ---
 
@@ -799,7 +814,7 @@ If you use a filesystem-capable tool, setup may write your generated files direc
 
 ### Optional: cloud-connector mode (Dropbox / Google Drive)
 
-If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files in a Dropbox or Google Drive folder you own, and give each AI project only the map — `_BOOTSTRAP.md` and `_INDEX.md`, with the canonical locators filled into the index. The AI reads the live files through the connector when a conversation needs them, so your canonicals never go stale inside a project.
+If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files — including `_INDEX.md` — in a Dropbox or Google Drive folder you own, and give each AI project only `_BOOTSTRAP.md`, which carries the exact `_INDEX.md` locator. The AI fetches the index live, then the canonicals it names, so your files never go stale inside a project — keep only the bootstrap in the project; fetch the index and canonicals live.
 
 If your tool has **no** connector (or it isn't on your plan), nothing changes: upload the relevant files into the project or chat as usual. Those uploads are copies — after any approved change, update the canonical folder so the copies don't drift. Connector mode is optional; the upload floor always works.
 
@@ -899,7 +914,7 @@ At the start of every conversation in this project, read _BOOTSTRAP.md from the 
 **Cloud-connector mode — add this line only** if your canonicals live in Dropbox/Drive and this tool has a connector to them:
 
 ```
-If _INDEX.md lists connector-backed canonical locators, read those live files by exact locator through the connector before substantive work; if the connector fails or a locator is missing, say so and ask me to upload or paste that file — don't guess from memory.
+Follow the exact _INDEX.md locator that _BOOTSTRAP.md declares: fetch _INDEX.md live by that locator (do not assume the index is already mounted), then read the live canonicals it names by exact locator before substantive work; if the connector fails or a locator is missing, say which one and ask me to upload or paste that file — don't guess from memory.
 ```
 
 ---
