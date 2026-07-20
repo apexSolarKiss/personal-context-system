@@ -19,14 +19,14 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 Where your canonical files actually live — one of these is true for you:
 
 - **Local-folder canonical** — the files live in a folder you own on disk; a filesystem-capable tool reads them there directly.
-- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The locators in the file list below are the **canonical locators** (a path, file URL, or file ID, depending on the connector), and the tool reads the live files through the connector. The AI project then holds only the map (`_BOOTSTRAP.md` + `_INDEX.md`), not full copies.
+- **Cloud-connector canonical** — the files live in Dropbox, Google Drive, or another service your AI tool can connect to. The locators in the file list below are the **canonical locators** (a path, file URL, or file ID, depending on the connector), and the tool reads the live files through the connector. The AI project then standing-mounts only `_BOOTSTRAP.md` (which carries the `_INDEX.md` locator); `_INDEX.md` itself and the canonicals are fetched live, not held as permanent mounts.
 - **Project-file mirror** — the files uploaded into the AI project are **copies**. If a local or cloud canonical also exists, the canonical wins and the upload is a fallback that can go stale.
 
 This is optional. With no connector and no separate canonical folder, the uploaded project files simply *are* your working copy — the universal floor. Connector mode is an upgrade, not a requirement.
 
 ## Connector read protocol
 
-Applies only in **cloud-connector** mode:
+**Three states.** In **healthy connector mode**, `_INDEX.md` is fetched live at the locator the bootstrap declares — it is not a standing mount — and it then routes the canonicals live. In **temporary connector failure**, name the exact failed locator, ask the user for a current point-in-time copy, resume the live route on recovery, and remove the temporary copy afterward. In **no-connector** mode, the uploaded project files (the index included) are the working set — the upload floor. The numbered steps below apply in cloud-connector mode:
 
 1. **Read the exact connector locators** named in the file list. Do **not** broad-search the user's cloud storage unless they explicitly ask.
 2. **Fetch the relevant live files through the connector** before substantive work — the same read order the bootstrap directs, sourced live.
