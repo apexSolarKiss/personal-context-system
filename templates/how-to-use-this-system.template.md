@@ -12,8 +12,8 @@ Four layers:
 
 1. **Context files** in an offline folder you own (durable backup) and uploaded into each AI tool's project (where the AI reads them).
 2. **A bootstrap file** (`_BOOTSTRAP.md`) the AI reads first in every conversation — it directs the read order.
-3. **A short instruction** pasted into each tool's settings field that tells the AI to read the bootstrap (works around tools that don't auto-load files).
-4. **Behavioral memory** (only in tools that have it) for cross-context behavioral patterns — kept lean. Where a tool has no reliable memory, the `identity-and-voice.md` file carries the same load.
+3. **The Project Instructions block** (from `chat-tool-settings.md`) pasted into a tool's **project** instructions field — or supplied as chat-local invocation where the tool has no projects — telling the AI to read the bootstrap (works around tools that don't auto-load files). This is project invocation, not account-wide personalization.
+4. **Optional account-level behavior blocks** (from `chat-tool-settings.md`) installed in a tool's account-wide custom-instructions/preferences field for cross-tool behavioral consistency — **behavior only, no life facts**, and kept lean. Where a tool has no such field, the `identity-and-voice.md` context file carries the same behavioral load.
 
 The complexity is in setting it up once; using it is just "start a new conversation and the AI already knows you."
 
@@ -48,9 +48,28 @@ If your tool has **no** connector (or it isn't on your plan), nothing changes: u
 
 1. **Create your private folder** (cloud-synced is fine), e.g. `{{SYSTEM_NAME}}`, separate from the scaffold clone. This is the durable home and canonical source of your context.
 2. **Fill the files.** Start small: `identity-and-voice.md`, plus a domain file for each part of your life you want held. Use the templates; replace the placeholders.
-3. **Per tool:** create a project, upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the text from `project-instructions.md` into the project's instructions field.
+3. **Per tool:** create a project, upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the **Project Instructions** block from `chat-tool-settings.md` into the project's instructions field. (Optionally install an account-level block too — see *Chat-tool settings: which block goes where* below.)
 
 Repeat step 3 for each tool you use. The files are identical across tools.
+
+---
+
+## Chat-tool settings: which block goes where
+
+`chat-tool-settings.md` holds the exact strings you paste into tools' settings fields, split across **three distinct surfaces**. They are not interchangeable — installing the wrong block in the wrong field is how project invocation and account-wide personalization get silently collapsed. It is a **deployment-only** reference, **not a standing project source** — don't mount it as a context file (it isn't read during conversations); `_INDEX.md` lists it under deployment-only.
+
+| Surface | Scope | Canonical block |
+|---|---|---|
+| ChatGPT Personalization | account-wide | `ChatGPT // Personalization // Custom Instructions` |
+| Claude Chat Instructions | account-wide | `Claude Chat Settings // Instructions` |
+| ChatGPT / Claude Project Instructions | project only | `Project Instructions // ChatGPT + Claude Projects` |
+
+- **Which block goes where:** the *Project Instructions* block goes in a project's instructions field and is what invokes your context system. The two account-level blocks go in the tool's account-wide personalization/instructions field and set behavior everywhere in that tool.
+- **Never paste the whole file into one field.** Install only the block named for that surface.
+- **Installation is manual, and it is yours to do.** No setup tool can reach into a tool's settings UI and install these for you — it generates the strings; you paste them.
+- **Verify parity yourself.** After pasting, confirm the field's contents match the block in `chat-tool-settings.md`. Parity is user-visible or user-attested — a setup tool cannot confirm a UI it can't see.
+- **Account-level personalization is optional.** The account-level blocks are an extra — install them only if you want them. The system runs without them: project-mode operation needs the *Project Instructions* block plus the relevant context sources; no-Projects operation needs the supplied context plus chat-local invocation.
+- **Two failure legs are separate.** "The AI is generically-worded *everywhere*" is an account-level behavior problem (check the Personalization / Instructions block); "the AI doesn't know my context *in this project*" is a project-retrieval problem (check the Project Instructions block + `_BOOTSTRAP.md` in the project). Diagnose them separately.
 
 ---
 
@@ -59,7 +78,7 @@ Repeat step 3 for each tool you use. The files are identical across tools.
 Two things you can layer on later — both optional, neither required for the system to work:
 
 - **Import existing context.** If you already have useful context about yourself in another AI tool, an old chat, an exported memory, or a document, you can fold it in instead of starting from scratch. Point the setup (or any later "update my context" conversation) at **one or two high-signal sources**; it will help you extract and consolidate them. Treat whatever comes out as a **draft** — you review and approve what actually lands in your files. Your files are canonical only after you've okayed the content. Agreement across sources is evidence, not proof — your review is the validation step (*synthesis is not validation*).
-- **Global behavior preferences.** The project instructions make a tool behave right *inside your project*. If you also want it to treat you consistently *everywhere* in that tool, paste a short **behavior-only** block — tone, formatting, pushback style, outbound-comms default, and *files win over memory* — into the tool's global custom-instructions/preferences area. Derive it from `identity-and-voice.md` and regenerate it when that file changes; **keep life facts out of it** (facts stay in your files). The setup guide can produce this block for you.
+- **Global behavior preferences.** The project instructions make a tool behave right *inside your project*. If you also want it to treat you consistently *everywhere* in that tool, install the account-level block for that surface — `Claude Chat Settings // Instructions` or `ChatGPT // Personalization // Custom Instructions` from `chat-tool-settings.md` — into the tool's account-wide custom-instructions/preferences area. These are **behavior only — no life facts** (facts stay in your files). They are generated from your `identity-and-voice.md` preferences, but their exact deployed strings are owned durably by `chat-tool-settings.md` — change one there on purpose, then re-paste (see *Chat-tool settings: which block goes where*). The setup guide generates these blocks for you; installing them is optional.
 
 ---
 
@@ -73,9 +92,9 @@ Treat every upload as a sharing decision. If a file contains context that does n
 
 ## Daily use
 
-Start a new conversation in any tool's project. The bootstrap runs automatically — the AI reads `_BOOTSTRAP.md` → `_INDEX.md` → whatever topic files are relevant. You don't paste anything at the start of conversations.
+Start a new conversation in any tool's **project**. The bootstrap runs automatically — the AI reads `_BOOTSTRAP.md` → `_INDEX.md` → whatever topic files are relevant, and you don't paste anything at the start. **In no-Projects / chat-local mode there is no project to hold the invocation**, so you supply the relevant context and paste the *Project Instructions* block at the start of each chat where you want the system active.
 
-**Is it working?** The AI knows your name and basics, applies your voice conventions without being asked, and pulls the right context for the topic. If it's being generic, the system isn't loading — most likely the instructions paste-in is missing from the settings field, or `_BOOTSTRAP.md` isn't in the project.
+**Is it working? — two failure legs are separate.** If the AI **doesn't know your context in a project** (generic on your specifics, wrong domain), that's a *project-retrieval* problem — most likely the *Project Instructions* block is missing from the project's instructions field, or `_BOOTSTRAP.md` isn't in the project. If instead the AI's **tone/behavior is off everywhere** (across every tool and topic), that's an *account-level behavior* problem — check the account-level block in the tool's Personalization / Instructions field. Diagnose them separately.
 
 ---
 
@@ -110,4 +129,4 @@ A conversation produces content that fits no existing file → usually the answe
 
 ## When a new tool appears
 
-Copy the context files into the new tool's project, paste the instructions text into its settings field — done. The bootstrap pattern is the trick that makes the same files work in any tool. If you ever *can't* do that, the architecture has failed its purpose; the substance is yours, and tools are just rendering environments.
+First **classify the new tool's persistent field(s)** as account-level, project-level, or chat-local — the label "Custom Instructions" alone doesn't tell you which. Then map the blocks: copy the context files into the tool's project (or supply them chat-locally), paste the *Project Instructions* block into a **project** field or use it chat-locally, and — only if you want it — paste an **account-level** behavior block into an account-wide field. Verify each pasted field matches its block. The bootstrap pattern is the trick that makes the same files work in any tool. If you ever *can't* map these surfaces at all, the architecture has failed its purpose; the substance is yours, and tools are just rendering environments.

@@ -38,7 +38,7 @@ This is a gate, not a vibe. Do **not** silently assume "I can probably fetch the
   4. `_INDEX.template.md`
   5. `context-architecture-decisions.template.md`
   6. `how-to-use-this-system.template.md`
-  7. `project-instructions.template.md`
+  7. `chat-tool-settings.template.md`
 - **B) You have a local clone** and can read all the `*.template.md` files in `templates/`.
 
 **Say which one is true**, briefly, e.g. *"Capability check: I can see the Template Appendix with all its template sections — good to continue."* or *"Capability check: I'm running from a clone and can read all the templates in templates/."*
@@ -84,7 +84,7 @@ That's the whole skeleton:
 prove you can see the templates → greet (branched) → ask consent
   ├─ no  ⇒ bow out lightly ("go make some art")
   └─ yes ⇒ figure out your capability → set up paths/labels → interview
-           → generate the system → generate paste-in instructions
+           → generate the system → generate + confirm the settings blocks (chat-tool-settings.md)
            → deliver the complete bundle (real files / downloads / full Markdown), not a drip
            → guide install/upload into their AI tool(s)
 ```
@@ -107,7 +107,7 @@ This is the output-side bookend to the Step 0 capability gate. Step 0 proved you
 4. `_INDEX.md`
 5. `context-architecture-decisions.md`
 6. `how-to-use-this-system.md`
-7. the project-instructions paste-in text (generated in Step 8)
+7. `chat-tool-settings.md` — the three deployment blocks (project instructions + two account-level behavior blocks), generated in Step 7 and confirmed at the deployment-string gate
 
 **What counts as delivered — and what does not:**
 
@@ -137,7 +137,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.6.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.7.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -168,7 +168,7 @@ Say plainly: *"You're on a chat-only tool, so there's no repo to clone and nothi
 
 ---
 
-> **Scope-of-context guard (applies from here through the interview):** Use only the context the user supplies in *this* setup run. Do **not** infer their identity, ecosystem, default folder, initials, family, tools, or preferences from the host tool's memory, profile, account, or past chats. You may *ask*, and you may *surface* what the tool already has so they can confirm it — but do not silently *assume* it. A setup that quietly personalizes itself from one product's memory defeats the portable, user-owned point of the whole system.
+> **Scope-of-context guard (applies from here through the interview):** Use only the context the user supplies in *this* setup run. Do **not** infer their identity, ecosystem, default folder, initials, family, tools, or preferences from the host tool's memory, profile, account, or past chats — nor from ASK defaults or this scaffold's own authorial voice. You may *ask*, and you may *surface* what the tool already has so they can confirm it — but do not silently *assume* it. A setup that quietly personalizes itself from one product's memory defeats the portable, user-owned point of the whole system.
 
 ---
 
@@ -183,6 +183,8 @@ One thing to keep straight: **`personal-context-system` is the public scaffold t
 ## Step 5 — audit what's already there
 
 Where the tool allows it, look at what context/memory already exists before you start filling files — existing built-in memory, prior project notes, anything the user already pasted in. The point is to avoid re-asking what the tool already knows, and to fold existing scraps into the new structure instead of duplicating them. **Stay within what the user has shared or explicitly pointed you to** — don't go spelunking their filesystem or personal folders unprompted; if reading something would help, ask first. Where the tool gives you no such access, just say so and move on.
+
+**Migrating an existing system (opt-in).** If the user already has a personal-context-system generated from an earlier release (v0.6.0 or earlier) and wants the new three-surface settings model, treat it as a **migration, not a fresh build**: create `chat-tool-settings.md`, carry their existing bootstrap paste-in forward unchanged as the *Project Instructions* block, and generate the two account-level behavior blocks from their confirmed `identity-and-voice.md` preferences (through the same Step 7 confirmation gate). **Disposition any bootstrap text already installed account-wide:** v0.6.0 let no-Projects users paste the bootstrap invocation into an account-wide Custom Instructions field — if theirs is there, move it to a **project** field or use it chat-locally where those surfaces exist, **remove it from the account-wide behavior field** when adopting the canonical mapping, and retain it globally only through an explicit single-field fallback decision clearly marked noncanonical. Then add the deployment-only entry to their `_INDEX.md` and the surface map to their owner manual where appropriate, install only the surfaces they choose (verifying parity), and keep any old `project-instructions.md` as history. **Never silently activate account-wide personalization.**
 
 **Optional — offer to import existing context (keep it light).** Some users already have useful context about themselves in another AI tool, an old chat, an exported memory, or a document. Offer to fold it in — but don't turn setup into a migration project:
 
@@ -209,6 +211,8 @@ Start with the smallest thing that actually captures them:
 - **`identity-and-voice.md`** — the one file read in every conversation: who they are at a glance + how the AI should talk to them. Use the **identity-and-voice** template (Appendix).
 - **A domain file per part of life they actually want held** — household, work, a project, family, health, whatever's true for them. One domain per file, from the **domain-file** template (Appendix). Don't manufacture domains they didn't ask for.
 
+Capture enough of their **behavior preferences** in `identity-and-voice.md` to later generate the two account-level settings blocks (Step 7): interaction mode / tone, what to challenge vs. accept, formatting conventions, outbound-communication default, uncertainty / load-bearing-assumption handling (if they offer it), and the files-over-memory rule. These are **behavior only — no life facts**, and they must come from what the user actually tells you — never inferred from ASK defaults, this scaffold's authorial voice, or the host tool's memory. Ask only what they'll actually use; don't turn it into a questionnaire.
+
 Keep it lean. A system they'll maintain beats an elaborate one they abandon. They can always add files later.
 
 ---
@@ -220,14 +224,24 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Clean final filenames — drop the `.template` suffix.** `identity-and-voice.template.md` → `identity-and-voice.md`. The `.template` suffix only exists in the scaffold.
 - **Fill the placeholders.** `{{NAME}}`, `{{SYSTEM_NAME}}`, `{{DATE}}` (today), `{{OWNER_CHOSEN_NAME}}`, etc. Delete the `<!-- TEMPLATE: ... -->` authoring comments and any `[square-bracket italics]` examples that don't apply.
 - **Always include the skeleton files** so the system bootstraps in any tool: `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`, and `how-to-use-this-system.md` (the owner's manual, generated with their real folder name and tool setup).
+- **Generate `chat-tool-settings.md`** from the **chat-tool-settings** template (Appendix) — the deployment canonical carrying three distinctly-labeled blocks: the *Project Instructions* block (the thin bootstrap invocation) and the two **account-level behavior blocks** (*Claude Chat Settings // Instructions* and *ChatGPT // Personalization // Custom Instructions*), generated **behavior-only, no life facts**, from the confirmed `identity-and-voice.md` preferences. This file owns the exact deployed strings; it is delivered in the bundle but is **not** mounted as a project context source.
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.6.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.7.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.6.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.7.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+
+**Deployment-string confirmation gate — before you treat `chat-tool-settings.md` as final or begin any install.** The three blocks are *deployment strings*, distinct from the semantic preferences they came from, so the user confirms them explicitly before they become canonical:
+
+1. Present the three blocks **separately, under their exact surface labels** (*Project Instructions // ChatGPT + Claude Projects*; *Claude Chat Settings // Instructions*; *ChatGPT // Personalization // Custom Instructions*).
+2. Invite correction — or an explicit confirmation — of the exact strings.
+3. Finalize and deliver `chat-tool-settings.md` **only after** that decision.
+4. Keep **generation** separate from **activation**: all three blocks are generated regardless, but *installing* either account-level block is the user's choice — declining does **not** make the bundle incomplete, and account-wide personalization is never activated silently.
+
+This is the middle link of the authority chain: semantic behavior decision → **explicit deployment-string decision** → canonical `chat-tool-settings.md` → preserve the prior version under the system's snapshot conventions → manual paste → parity verification.
 
 **Now write the output, branched by capability:**
 
@@ -245,11 +259,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 
 ---
 
-## Step 8 — generate the paste-in + guide the install
+## Step 8 — guide manual installation + verify parity
 
-Two artifacts, then a handoff:
+Two things, then a handoff:
 
-1. **The paste-in instruction.** Generate the short text from the **project-instructions** template (Appendix) — the ~50-word block that goes into each tool's "Project instructions" / "Custom instructions" field, telling the AI to read `_BOOTSTRAP.md` first every conversation. This is what makes the system invoke itself.
+1. **The settings blocks** — already generated and confirmed in Step 7, in `chat-tool-settings.md`: the *Project Instructions* block (what makes the system invoke itself) plus the two optional account-level behavior blocks. Here you **guide the user to install** each selected block into its surface — you generate and hand over the exact strings; the user pastes them (you cannot reach into another tool's settings UI). You do not regenerate them.
 2. **The canonical files** — already generated in Step 7.
 
 **Completion audit — run this before you guide the install. Tie it to artifacts, not to words.** For each required output, mark how it was *actually delivered* (per the delivery contract near the top) — not whether you *plan* to deliver it:
@@ -260,20 +274,21 @@ Two artifacts, then a handoff:
 - `_INDEX.md` — downloadable · full Markdown · **MISSING**
 - `context-architecture-decisions.md` — downloadable · full Markdown · **MISSING**
 - `how-to-use-this-system.md` — downloadable · full Markdown · **MISSING**
-- project-instructions paste-in — provided verbatim · **MISSING**
+- `chat-tool-settings.md` (3 labeled blocks) — downloadable file · full Markdown block · **MISSING**
 
 **Any output marked MISSING: generate it now, before install guidance.** A file that is only named, described, or promised for later counts as MISSING. Move on only once every row is delivered.
 
 Then **guide** the user to install them — and here is where you stay honest (Step 0): you can't do this step *for* them across a tool boundary. So walk them through it:
 
-- **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the instruction text into the project's instructions field.
-- **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does. Two honest paths remain: (a) paste the instruction text into the tool's **always-on custom-instructions** field, which applies to every chat (in ChatGPT: **Settings → Personalization → Custom instructions**), and keep the context files somewhere you can attach them; or (b) as the simplest floor, **upload the context files and paste the instruction at the start of a chat** whenever they want the system active. Tell them plainly which their tool supports — never promise a projects feature they may not have.
-- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` — with the exact `_INDEX.md` connector locator (a path, file URL, or file ID, depending on the connector) written into it — and paste the instruction. The tool fetches `_INDEX.md` live by that locator, then reads the live canonicals the index declares, on demand. **Connector-mode setup is not complete until the exact `_INDEX.md` locator is known and written into `_BOOTSTRAP.md`.** Populate the topic-canonical locators in `_INDEX.md`'s file list; retain the generated `## Connector read protocol`; and add the optional connector line from `project-instructions.md`. The `_INDEX.md` locator itself belongs only in `_BOOTSTRAP.md`. If the index locator is not yet known, leave `INDEX_CANONICAL_LOCATOR` as an explicit placeholder and do not rely on connector mode. If a topic-file locator is unknown, leave that specific file-list locator as a placeholder. If a locator ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
-- **Optional — a global behavior-preferences block.** The project instructions above make the tool behave right *inside this project*. If the user also wants it to treat them consistently *everywhere* in that tool, offer to generate a short **behavior-only** block for the tool's always-on custom-instructions/preferences area — tone, formatting, what to push on vs. accept, outbound-comms default, and the source-of-truth rule (*durable facts live in my files; if memory conflicts with a file, the file wins*). **Behavior only — no life facts** (those stay in the files). It's a *derived* paste-in, not a new canonical file: when `identity-and-voice.md` changes, regenerate it rather than editing it as a separate source. Name the install surface generically — settings move — e.g. *"wherever your tool keeps custom instructions or preferences."* If the tool has no such field, keep the block and paste it at the start of chats where you want these behavior defaults active.
+- **Unfamiliar tool? Classify the field first.** Before mapping any block, classify each of the tool's persistent fields as **account-level**, **project-level**, or **chat-local**. The label "Custom Instructions" is not enough to tell you which — a project's instructions field and an account-wide personalization field can share that name. Map project invocation to a project (or chat-local) field, and account-level behavior to an account-wide field.
+- **If the tool has projects/spaces** (e.g. ChatGPT Plus Projects, Claude Projects): create one — suggest naming it after their private system folder (e.g. `personal-<initials>`) so the mounted project matches the source of truth; they can call it anything, the matching name is just the default — then upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`) and paste the **Project Instructions** block (from `chat-tool-settings.md`) into the project's instructions field. Then have the user confirm the field matches the block — parity is user-visible or user-attested; you can't see their UI.
+- **If the tool has no projects** (e.g. free ChatGPT) — don't assume it does, and **don't collapse the two authorities into one field.** The account-wide field is for *behavior*, not project invocation. Two honest paths, kept separate: (a) install the **account-level behavior block** (*ChatGPT // Personalization // Custom Instructions*) in **Settings → Personalization → Custom instructions** — account-wide, behavior only; and (b) **activate the context system per chat** by supplying the relevant context files and pasting the **Project Instructions** block as chat-local invocation text at the start of a chat. **Do not silently install the Project Instructions / bootstrap block account-wide.** If the tool exposes only *one* persistent field, name the tradeoff — global behavioral personalization vs. global context invocation — and let the user choose one explicitly; don't present that single-field fallback as the canonical three-surface mapping. Tell them plainly which their tool supports — never promise a projects feature it may not have.
+- **If the tool has a connector to the user's cloud storage** (optional connector mode): instead of uploading every context file, mount only `_BOOTSTRAP.md` — with the exact `_INDEX.md` connector locator (a path, file URL, or file ID, depending on the connector) written into it — and paste the instruction. The tool fetches `_INDEX.md` live by that locator, then reads the live canonicals the index declares, on demand. **Connector-mode setup is not complete until the exact `_INDEX.md` locator is known and written into `_BOOTSTRAP.md`.** Populate the topic-canonical locators in `_INDEX.md`'s file list; retain the generated `## Connector read protocol`; and add the optional connector line from the *Project Instructions* block of `chat-tool-settings.md`. The `_INDEX.md` locator itself belongs only in `_BOOTSTRAP.md`. If the index locator is not yet known, leave `INDEX_CANONICAL_LOCATOR` as an explicit placeholder and do not rely on connector mode. If a topic-file locator is unknown, leave that specific file-list locator as a placeholder. If a locator ever fails to load, it should say which one and ask for that file — never guess. Offer this **only when the connector genuinely exists**; otherwise upload the files as above.
+- **Optional — account-level personalization.** The Project Instructions block above makes the tool behave right *inside this project*. If the user also wants consistent treatment *everywhere* in that tool, the two account-level blocks in `chat-tool-settings.md` (*Claude Chat Settings // Instructions*; *ChatGPT // Personalization // Custom Instructions*) are already generated — **behavior only, no life facts** (those stay in the files). Installing them is the user's choice: paste the block for the surface into that tool's account-wide custom-instructions/preferences area — name the surface generically, settings move (*"wherever your tool keeps custom instructions or preferences"*). These are canonical strings **owned by `chat-tool-settings.md`**, not throwaway derivations: to change one, edit it there on purpose and re-paste. **Account-wide personalization is never installed silently**; if the user declines, the system is still fully functional without it — project-mode operation needs the *Project Instructions* block plus the relevant context sources, and no-Projects operation needs the supplied context plus chat-local invocation. If the tool has no account-wide field, keep the account-level block and paste it at the start of chats where you want these behavior defaults active.
 - Remind them the files are identical across tools — when they update one, re-sync the others.
 - Remind them, once more, gently: **private system in their own folder; never commit it back to the public scaffold.** (Only relevant on the filesystem path; harmless to say either way.)
 
-**Terminal state — the bundle is delivered, not just described.** On the **filesystem path**, the generated files exist in the private destination folder and the paste-in is installed or handed over. On the **chat-only path**, the user has the whole required bundle **in hand** — as downloadable artifacts (or a zip) or as full Markdown blocks — **plus** the project-instructions paste-in, and the completion audit above shows no `MISSING` rows. A session that ends with any required file still only described, or deferred to a "next" turn that never came, has **not** completed setup, however polished the closing summary reads. Only once the bundle is genuinely delivered:
+**Terminal state — the bundle is delivered, not just described.** On the **filesystem path**, the generated files exist in the private destination folder and the settings blocks are handed over for the user to install (installation is the user's manual step — never claim you modified a settings UI you can't reach). On the **chat-only path**, the user has the whole required bundle **in hand** — as downloadable artifacts (or a zip) or as full Markdown blocks — **plus** `chat-tool-settings.md`, and the completion audit above shows no `MISSING` rows. Completion depends on **file delivery plus an honest handoff** — with user-visible or user-attested UI-to-canonical parity where the user reports installing a block — not on any claim that an inaccessible UI was changed. A session that ends with any required file still only described, or deferred to a "next" turn that never came, has **not** completed setup, however polished the closing summary reads. Only once the bundle is genuinely delivered:
 
 Then you're done — for now. The next time they open a conversation in any of those tools, the AI reads the bootstrap and already knows them. And because the bootstrap carries a **maintenance mode**, that same conversation can keep their context *current* over time — they just say "update my context" — not only recall it. The interface doesn't die when this setup session ends.
 
@@ -505,6 +520,10 @@ In cloud-connector mode, add the canonical locator so the AI fetches the right l
 
 - **`context-architecture-decisions.md`** // the ADR. Read to understand *why* the system is structured this way. Also carries the public/private boundary if external tools touch this context.
 
+### Deployment (not a standing project source)
+
+- **`chat-tool-settings.md`** // deployment canonical // the exact strings pasted into tools' settings fields, split across three surfaces (project instructions + two account-level behavior blocks). **Do not mount it as a context source** — it is not read during conversations. `_BOOTSTRAP.md` owns project invocation; `identity-and-voice.md` owns semantic behavior; this settings canonical owns the exact UI strings. See the ADR's *Chat-tool settings: deployment-string authority*.
+
 ---
 
 ## Retrieval protocol
@@ -512,13 +531,13 @@ In cloud-connector mode, add the canonical locator so the AI fetches the right l
 1. If a request touches anything in the file list above, read the relevant file before substantive work.
 2. For multi-domain requests, pull every relevant file together.
 3. When something changes in a domain, update that file directly + bump its `Last updated` date.
-4. Always-on preferences hold only behavior/tone + this index pointer. New substantive content goes into files.
+4. Always-on (account-level) preferences hold **behavior/tone only** — no index pointer. Project invocation (read `_BOOTSTRAP.md` → `_INDEX.md`) is owned by the Project Instructions block; `_BOOTSTRAP.md` owns the exact `_INDEX.md` locator. New substantive content goes into files.
 
 ---
 
 ## Cross-tool deployment
 
-This system can live in more than one tool (e.g. a Claude project and a ChatGPT project) at once. Files are identical across tools — when you update one, update the others. The bootstrap pattern + the pasted instruction (see `project-instructions.md`) is what guarantees the system invokes itself in each tool. Your offline folder is the durable backup and the canonical source the tools re-sync from. In cloud-connector mode there is less to re-sync: the tools read the one live canonical through the connector, so an approved edit to the cloud file is visible everywhere at once (uploaded copies, if any, are fallbacks to refresh).
+This system can live in more than one tool (e.g. a Claude project and a ChatGPT project) at once. Files are identical across tools — when you update one, update the others. The bootstrap pattern + the pasted Project Instructions block (see `chat-tool-settings.md`) is what guarantees the system invokes itself in each tool. Your offline folder is the durable backup and the canonical source the tools re-sync from. In cloud-connector mode there is less to re-sync: the tools read the one live canonical through the connector, so an approved edit to the cloud file is visible everywhere at once (uploaded copies, if any, are fallbacks to refresh).
 ```
 
 ---
@@ -554,7 +573,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.6.0)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.7.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -591,7 +610,7 @@ Durable context lives in three tiers with different reliability properties acros
 
 | Tier | Mechanism | Role |
 |---|---|---|
-| **1. Always-on preferences** | The tool's built-in preferences / memory feature, where it has one. Tool-specific; not all tools have it. | A few things that should apply in *every* conversation: tone, response style, your name, formatting preferences. Small and lean. |
+| **1. Always-on preferences** | The tool's built-in preferences / memory feature, where it has one. Tool-specific; not all tools have it. | A few **behavior-only** things that should apply in *every* conversation: tone, response style, formatting preferences. No life facts — your name and other identity details live in `identity-and-voice.md`, a context file. Small and lean. |
 | **2. Context files** | Markdown files in the tool's project/sources + an offline copy you own. Portable across tools. | The substantive durable content, organized by domain. **This is the load-bearing tier.** |
 | **3. Past-conversation search** | The tool's history-search, where available. Lossy, best-effort. | Backup recall only. Never a primary store. |
 
@@ -601,7 +620,29 @@ Durable context lives in three tiers with different reliability properties acros
 
 *(Advanced: in tools with a dedicated memory API — e.g. Claude's `memory_user_edits` — tier 1 maps onto that feature.)*
 
-**Installing tier 1 (optional).** Where a tool has an always-on custom-instructions/preferences field, you can install a short **behavior-only** block there so it treats you consistently *across the whole tool*, not only inside one project. Derive it from `identity-and-voice.md` (tone, formatting, push-vs-accept, outbound default, and *files win over memory*), keep it **behavior-only — no life facts**, and regenerate it when `identity-and-voice.md` changes rather than maintaining a second source. It is a *derived* paste-in, not a new canonical file.
+**Installing tier 1 (optional).** Where a tool has an always-on custom-instructions/preferences field, you can install a short **behavior-only** block there so it treats you consistently *across the whole tool*, not only inside one project. Keep it **behavior-only — no life facts** (those stay in your files); it is generated from your confirmed `identity-and-voice.md` preferences. But it is **not** an ephemeral re-derivation with no owner: its exact deployed string is owned by `chat-tool-settings.md`, the deployment canonical (see *Chat-tool settings: deployment-string authority* below). Decide a string change on purpose, record it there, then paste — don't silently regenerate it and lose the record of what is actually deployed.
+
+### Chat-tool settings: deployment-string authority
+
+The strings you paste into a tool's settings fields are their own layer, with their own canonical — **`chat-tool-settings.md`**. It exists because three distinct surfaces are easy to silently collapse into one "instructions" field, and because a compressed deployed string drifts from the semantic preferences it came from unless something durably owns it.
+
+**Three deployment surfaces — keep them distinct:**
+
+| Surface | Scope | Canonical block in `chat-tool-settings.md` |
+|---|---|---|
+| ChatGPT Project / Claude Project instructions | project only | *Project Instructions // ChatGPT + Claude Projects* |
+| Claude account instructions | account-wide | *Claude Chat Settings // Instructions* |
+| ChatGPT Personalization | account-wide | *ChatGPT // Personalization // Custom Instructions* |
+
+**Semantic behavior vs. exact deployment string are different authorities.** `identity-and-voice.md` owns *what your preferences are*; `chat-tool-settings.md` owns *the exact compressed strings deployed to each surface*. A change to the former does not silently rewrite the latter.
+
+**The authority chain — do not skip a link:** semantic behavior decision → explicit deployment-string decision → update `chat-tool-settings.md` → preserve the prior version under your system's snapshot conventions → manually paste the block into its named UI field → verify UI-to-canonical parity.
+
+- **Live UI fields are mirrors.** A UI edit is not canonical until it is recorded back into `chat-tool-settings.md`.
+- **Historical settings artifacts are history.** A superseded settings artifact (e.g. an older `project-instructions.md`) is retained as lineage, not rewritten to look current.
+- **Files-over-memory holds for substance.** Durable facts live in your context files; if a tool's memory conflicts with a file, the file wins. Account-level blocks carry **behavior only — no life facts**.
+- **Bootstrap-only connector mode is unchanged.** This settings layer is orthogonal to the connector read path; the four operating modes below still govern how canonicals are read.
+- **Deployment-only, not a standing source.** `chat-tool-settings.md` is generated into your bundle and owns the strings, but it is not mounted as a project context source — `_INDEX.md` lists it under deployment-only.
 
 ### Connector-backed canonicals (optional refinement of tier 2)
 
@@ -660,7 +701,7 @@ Tools differ in how they load project files:
 
 Writing one version per tool would destroy the single-source-of-truth property. The bootstrap pattern solves it instead with three thin components:
 
-1. **A tool-side instruction field** (the "project instructions" / "custom instructions" box) — the one mechanism guaranteed to apply every conversation. ~2 sentences: *"At the start of every conversation, read `_BOOTSTRAP.md` first and follow it."*
+1. **The Project Instructions block**, pasted into the tool's **project** instructions field — or, where a tool has no projects, supplied as chat-local invocation at the start of a chat — is the mechanism that reliably runs the bootstrap every conversation. ~2 sentences: *"At the start of every conversation, read `_BOOTSTRAP.md` first and follow it."* This is **project invocation**, distinct from account-wide personalization (which is behavior-only); do not install project invocation into an account-wide field.
 2. **`_BOOTSTRAP.md`** (a context file) — directs the read order: `_BOOTSTRAP.md` → `_INDEX.md` → topic files. Identical across every tool.
 3. **`_INDEX.md` + topic files** — the substantive system. The bootstrap just guarantees they get read.
 
@@ -720,7 +761,7 @@ When memory, files, and conversation disagree:
 2. Read the relevant topic file before doing substantive work in its domain.
 3. For multi-domain requests, pull every relevant file.
 4. When something changes in a domain, update that file directly + bump its `Last updated` date.
-5. Always-on preferences hold only behavior/tone + the index pointer. New substantive content goes into **files**.
+5. Always-on (account-level) preferences hold **behavior/tone only** — no life facts, no index pointer. Project invocation (read `_BOOTSTRAP.md` → `_INDEX.md`) is owned by the Project Instructions block, and `_BOOTSTRAP.md` owns the exact `_INDEX.md` locator. New substantive content goes into **files**.
 6. **"Remember this" guard.** Any request to remember/save a *substantive* fact (about people, finances, plans, records — not a behavioral instruction) requires reading the relevant file *first*. If the fact is already there, say so and stop. Saving substantive facts to a tool's built-in memory is the exception; the file is the destination.
 
 ---
@@ -786,8 +827,8 @@ Four layers:
 
 1. **Context files** in an offline folder you own (durable backup) and uploaded into each AI tool's project (where the AI reads them).
 2. **A bootstrap file** (`_BOOTSTRAP.md`) the AI reads first in every conversation — it directs the read order.
-3. **A short instruction** pasted into each tool's settings field that tells the AI to read the bootstrap (works around tools that don't auto-load files).
-4. **Behavioral memory** (only in tools that have it) for cross-context behavioral patterns — kept lean. Where a tool has no reliable memory, the `identity-and-voice.md` file carries the same load.
+3. **The Project Instructions block** (from `chat-tool-settings.md`) pasted into a tool's **project** instructions field — or supplied as chat-local invocation where the tool has no projects — telling the AI to read the bootstrap (works around tools that don't auto-load files). This is project invocation, not account-wide personalization.
+4. **Optional account-level behavior blocks** (from `chat-tool-settings.md`) installed in a tool's account-wide custom-instructions/preferences field for cross-tool behavioral consistency — **behavior only, no life facts**, and kept lean. Where a tool has no such field, the `identity-and-voice.md` context file carries the same behavioral load.
 
 The complexity is in setting it up once; using it is just "start a new conversation and the AI already knows you."
 
@@ -822,9 +863,28 @@ If your tool has **no** connector (or it isn't on your plan), nothing changes: u
 
 1. **Create your private folder** (cloud-synced is fine), e.g. `{{SYSTEM_NAME}}`, separate from the scaffold clone. This is the durable home and canonical source of your context.
 2. **Fill the files.** Start small: `identity-and-voice.md`, plus a domain file for each part of your life you want held. Use the templates; replace the placeholders.
-3. **Per tool:** create a project, upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the text from `project-instructions.md` into the project's instructions field.
+3. **Per tool:** create a project, upload the context files (including `_BOOTSTRAP.md`, `_INDEX.md`, `context-architecture-decisions.md`), and paste the **Project Instructions** block from `chat-tool-settings.md` into the project's instructions field. (Optionally install an account-level block too — see *Chat-tool settings: which block goes where* below.)
 
 Repeat step 3 for each tool you use. The files are identical across tools.
+
+---
+
+## Chat-tool settings: which block goes where
+
+`chat-tool-settings.md` holds the exact strings you paste into tools' settings fields, split across **three distinct surfaces**. They are not interchangeable — installing the wrong block in the wrong field is how project invocation and account-wide personalization get silently collapsed. It is a **deployment-only** reference, **not a standing project source** — don't mount it as a context file (it isn't read during conversations); `_INDEX.md` lists it under deployment-only.
+
+| Surface | Scope | Canonical block |
+|---|---|---|
+| ChatGPT Personalization | account-wide | `ChatGPT // Personalization // Custom Instructions` |
+| Claude Chat Instructions | account-wide | `Claude Chat Settings // Instructions` |
+| ChatGPT / Claude Project Instructions | project only | `Project Instructions // ChatGPT + Claude Projects` |
+
+- **Which block goes where:** the *Project Instructions* block goes in a project's instructions field and is what invokes your context system. The two account-level blocks go in the tool's account-wide personalization/instructions field and set behavior everywhere in that tool.
+- **Never paste the whole file into one field.** Install only the block named for that surface.
+- **Installation is manual, and it is yours to do.** No setup tool can reach into a tool's settings UI and install these for you — it generates the strings; you paste them.
+- **Verify parity yourself.** After pasting, confirm the field's contents match the block in `chat-tool-settings.md`. Parity is user-visible or user-attested — a setup tool cannot confirm a UI it can't see.
+- **Account-level personalization is optional.** The account-level blocks are an extra — install them only if you want them. The system runs without them: project-mode operation needs the *Project Instructions* block plus the relevant context sources; no-Projects operation needs the supplied context plus chat-local invocation.
+- **Two failure legs are separate.** "The AI is generically-worded *everywhere*" is an account-level behavior problem (check the Personalization / Instructions block); "the AI doesn't know my context *in this project*" is a project-retrieval problem (check the Project Instructions block + `_BOOTSTRAP.md` in the project). Diagnose them separately.
 
 ---
 
@@ -833,7 +893,7 @@ Repeat step 3 for each tool you use. The files are identical across tools.
 Two things you can layer on later — both optional, neither required for the system to work:
 
 - **Import existing context.** If you already have useful context about yourself in another AI tool, an old chat, an exported memory, or a document, you can fold it in instead of starting from scratch. Point the setup (or any later "update my context" conversation) at **one or two high-signal sources**; it will help you extract and consolidate them. Treat whatever comes out as a **draft** — you review and approve what actually lands in your files. Your files are canonical only after you've okayed the content. Agreement across sources is evidence, not proof — your review is the validation step (*synthesis is not validation*).
-- **Global behavior preferences.** The project instructions make a tool behave right *inside your project*. If you also want it to treat you consistently *everywhere* in that tool, paste a short **behavior-only** block — tone, formatting, pushback style, outbound-comms default, and *files win over memory* — into the tool's global custom-instructions/preferences area. Derive it from `identity-and-voice.md` and regenerate it when that file changes; **keep life facts out of it** (facts stay in your files). The setup guide can produce this block for you.
+- **Global behavior preferences.** The project instructions make a tool behave right *inside your project*. If you also want it to treat you consistently *everywhere* in that tool, install the account-level block for that surface — `Claude Chat Settings // Instructions` or `ChatGPT // Personalization // Custom Instructions` from `chat-tool-settings.md` — into the tool's account-wide custom-instructions/preferences area. These are **behavior only — no life facts** (facts stay in your files). They are generated from your `identity-and-voice.md` preferences, but their exact deployed strings are owned durably by `chat-tool-settings.md` — change one there on purpose, then re-paste (see *Chat-tool settings: which block goes where*). The setup guide generates these blocks for you; installing them is optional.
 
 ---
 
@@ -847,9 +907,9 @@ Treat every upload as a sharing decision. If a file contains context that does n
 
 ## Daily use
 
-Start a new conversation in any tool's project. The bootstrap runs automatically — the AI reads `_BOOTSTRAP.md` → `_INDEX.md` → whatever topic files are relevant. You don't paste anything at the start of conversations.
+Start a new conversation in any tool's **project**. The bootstrap runs automatically — the AI reads `_BOOTSTRAP.md` → `_INDEX.md` → whatever topic files are relevant, and you don't paste anything at the start. **In no-Projects / chat-local mode there is no project to hold the invocation**, so you supply the relevant context and paste the *Project Instructions* block at the start of each chat where you want the system active.
 
-**Is it working?** The AI knows your name and basics, applies your voice conventions without being asked, and pulls the right context for the topic. If it's being generic, the system isn't loading — most likely the instructions paste-in is missing from the settings field, or `_BOOTSTRAP.md` isn't in the project.
+**Is it working? — two failure legs are separate.** If the AI **doesn't know your context in a project** (generic on your specifics, wrong domain), that's a *project-retrieval* problem — most likely the *Project Instructions* block is missing from the project's instructions field, or `_BOOTSTRAP.md` isn't in the project. If instead the AI's **tone/behavior is off everywhere** (across every tool and topic), that's an *account-level behavior* problem — check the account-level block in the tool's Personalization / Instructions field. Diagnose them separately.
 
 ---
 
@@ -884,28 +944,50 @@ A conversation produces content that fits no existing file → usually the answe
 
 ## When a new tool appears
 
-Copy the context files into the new tool's project, paste the instructions text into its settings field — done. The bootstrap pattern is the trick that makes the same files work in any tool. If you ever *can't* do that, the architecture has failed its purpose; the substance is yours, and tools are just rendering environments.
+First **classify the new tool's persistent field(s)** as account-level, project-level, or chat-local — the label "Custom Instructions" alone doesn't tell you which. Then map the blocks: copy the context files into the tool's project (or supply them chat-locally), paste the *Project Instructions* block into a **project** field or use it chat-locally, and — only if you want it — paste an **account-level** behavior block into an account-wide field. Verify each pasted field matches its block. The bootstrap pattern is the trick that makes the same files work in any tool. If you ever *can't* map these surfaces at all, the architecture has failed its purpose; the substance is yours, and tools are just rendering environments.
 ```
 
 ---
 
-### Appendix — project-instructions.template.md
+### Appendix — chat-tool-settings.template.md
 
-(This appendix section uses a `~~~` outer fence so the template's own ```` ``` ```` paste-block survives verbatim. When you emit the real `project-instructions.md`, use a normal ```` ``` ```` fence around the paste text.)
+(This appendix section uses a `~~~` outer fence so the template's own ```` ``` ```` paste-block survives verbatim. When you emit the real `chat-tool-settings.md`, use a normal ```` ``` ```` fence around the paste text.)
 
 ~~~markdown
-# Project instructions // paste-in for your AI tool(s)
+*Last updated: {{DATE}}*
 
-*This is the text to paste into the "Project instructions" / "Custom instructions" field in each tool's settings. It is NOT a context file — it lives in the tool's settings.*
+# Chat tool settings // canonical paste-ins
 
-*In ChatGPT with Projects (Plus): Project → gear icon → Project instructions.*
-*In ChatGPT without Projects (free): Settings → Personalization → Custom instructions.*
-*In Claude Projects: project → Custom Instructions field.*
-*Other tools: the equivalent always-applied instructions field. If the tool has none, paste this at the start of each conversation instead.*
+<!--
+TEMPLATE — the deployment canonical for the exact strings that get pasted into AI tools' settings fields.
+
+This file is NOT a standing project source (don't mount it as context). It is the durable owner of the
+compressed, exact deployment strings for three distinct surfaces. It is generated once during setup and
+updated deliberately thereafter — a live UI edit is not canonical until it is recorded back here.
+
+Fill the blocks below during setup:
+  - The Project Instructions block is near-fixed (the bootstrap invocation); keep it thin.
+  - The two account-level blocks are GENERATED from the user's CONFIRMED identity-and-voice preferences.
+    Behavior only — NO life facts, names, household/health/financial/relationship/identity payload.
+Delete these TEMPLATE comments and any [square-bracket italics] that don't apply when you emit the real file.
+-->
+
+*The exact strings to paste into your AI tools' settings fields. This file is a **deployment canonical**, not a context file — do not mount it as a project source. Install only the block named for each surface; never paste the whole file into one field. Account-level personalization is **optional** — generating these blocks does not install them, and you can decline either one.*
+
+## Authority split
+
+- **`_BOOTSTRAP.md`** — owns project invocation + the operating protocol the AI follows each conversation.
+- **`identity-and-voice.md`** — owns the fuller semantic behavior: voice, formatting, pushback, communication preferences.
+- **this file (`chat-tool-settings.md`)** — owns the deliberately-compressed, exact deployment strings below.
+- **the live ChatGPT / Claude UI fields** — are manually-installed **deployment mirrors**. A UI edit is not canonical until it is recorded back here.
+
+A change to your semantic behavior (`identity-and-voice.md`) does not silently rewrite these strings. Deciding to change a deployment string is a separate, explicit decision (see **Maintenance**).
 
 ---
 
-## Paste this:
+## Project Instructions // ChatGPT + Claude Projects
+
+*Project-scoped invocation. Paste into: **ChatGPT** Project → gear icon → Project instructions; **Claude** Project → Custom Instructions field. This is the block that makes the system invoke itself — it is not account-level personalization.*
 
 ```
 At the start of every conversation in this project, read _BOOTSTRAP.md from the project files first, and follow the read order and rules it specifies — including its maintenance mode when you want to update your context. The context files named by _INDEX.md are the source of truth: they may be uploaded project files, local files, or connector-backed canonicals. Apply the voice + style conventions described in identity-and-voice.md.
@@ -919,11 +1001,51 @@ Follow the exact _INDEX.md locator that _BOOTSTRAP.md declares: fetch _INDEX.md 
 
 ---
 
-## Why this exists
+## Claude Chat Settings // Instructions
 
-The instructions field is the one mechanism that *always* applies, in every conversation, in every tool. Retrieval-model tools won't reliably load your files on their own — pointing them at `_BOOTSTRAP.md` from the always-applied field guarantees the bootstrap runs. In auto-loading tools it's harmless redundancy. The text is thin (~50 words) and points to files rather than duplicating them, so it almost never needs to change.
+*Account-level, **optional**. Paste into: **Claude** → Settings → your account instructions field. Applies across all of Claude, not just one project. **Behavior only — no life facts** (those live in your files). Generated from your confirmed `identity-and-voice.md` preferences.*
+
+```
+<!-- TEMPLATE: generate this behavior-only block from the user's CONFIRMED identity-and-voice preferences. No life facts. Cover the dimensions below; drop any the user didn't supply. -->
+[Interaction mode / tone — e.g. how direct, how much hedging, register.]
+[What to challenge vs. accept — where the user wants pushback and where they don't.]
+[Formatting conventions — default typography / structure preferences.]
+[Outbound communication default — how to handle drafting messages on their behalf.]
+[Uncertainty + load-bearing-assumption handling — when supplied.]
+Source of truth: durable facts live in my context files; if memory conflicts with a file, the file wins.
+```
+
+---
+
+## ChatGPT // Personalization // Custom Instructions
+
+*Account-level, **optional**. Paste into: **ChatGPT** → Settings → Personalization → Custom instructions. Applies across all of ChatGPT, not just one project. **Behavior only — no life facts.** A compact form of the same confirmed preferences above.*
+
+```
+<!-- TEMPLATE: generate a COMPACT behavior-only block from the SAME confirmed preferences as the Claude block. No life facts. -->
+[Compact interaction mode / tone + what to challenge vs. accept + formatting + outbound default.]
+Source of truth: durable facts live in my context files; if memory conflicts with a file, the file wins.
+```
+
+---
 
 ## Maintenance
 
-If you ever rename the entry-point file or the voice file, update this text in every tool's settings field. Otherwise leave it alone.
+The authority chain, in order — do not skip a link:
+
+```text
+semantic behavior decision (identity-and-voice.md)
+  → explicit deployment-string decision (decide the string change on purpose)
+  → update this file (chat-tool-settings.md) — the canonical
+  → preserve the prior version under your system's snapshot conventions
+  → manually paste the changed block into its named UI field
+  → verify UI-to-canonical parity (the field now matches this file)
+```
+
+- A change to `identity-and-voice.md` does **not** silently rewrite these strings — decide the deployment-string change explicitly.
+- A live UI edit is **not** canonical until it is recorded back into this file.
+- **Supersede = history, not erasure.** When you change a deployed string, preserve the prior version under your system's snapshot conventions before overwriting — don't silently erase what was deployed.
+- Never reconstruct the current strings from memory, `_BOOTSTRAP.md`, `identity-and-voice.md`, an old conversation, or a historical snapshot — this file is the record.
+- Install only the block named for each surface. **Never paste the whole file into one field.**
+- Account-level personalization stays **optional**. Generating a block is not installing it; declining to install either account-level block leaves your context system fully functional — project-mode operation needs the *Project Instructions* block plus the relevant context sources, and no-Projects operation needs the supplied context plus chat-local invocation.
 ~~~
