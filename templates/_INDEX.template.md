@@ -66,6 +66,10 @@ In cloud-connector mode, add the canonical locator so the AI fetches the right l
 
 - **`context-architecture-decisions.md`** // the ADR. Read to understand *why* the system is structured this way. Also carries the public/private boundary if external tools touch this context.
 
+### Deployment (not a standing project source)
+
+- **`chat-tool-settings.md`** // deployment canonical // the exact strings pasted into tools' settings fields, split across three surfaces (project instructions + two account-level behavior blocks). **Do not mount it as a context source** — it is not read during conversations. `_BOOTSTRAP.md` owns project invocation; `identity-and-voice.md` owns semantic behavior; this settings canonical owns the exact UI strings. See the ADR's *Chat-tool settings: deployment-string authority*.
+
 ---
 
 ## Retrieval protocol
@@ -73,10 +77,10 @@ In cloud-connector mode, add the canonical locator so the AI fetches the right l
 1. If a request touches anything in the file list above, read the relevant file before substantive work.
 2. For multi-domain requests, pull every relevant file together.
 3. When something changes in a domain, update that file directly + bump its `Last updated` date.
-4. Always-on preferences hold only behavior/tone + this index pointer. New substantive content goes into files.
+4. Always-on (account-level) preferences hold **behavior/tone only** — no index pointer. Project invocation (read `_BOOTSTRAP.md` → `_INDEX.md`) is owned by the Project Instructions block; `_BOOTSTRAP.md` owns the exact `_INDEX.md` locator. New substantive content goes into files.
 
 ---
 
 ## Cross-tool deployment
 
-This system can live in more than one tool (e.g. a Claude project and a ChatGPT project) at once. Files are identical across tools — when you update one, update the others. The bootstrap pattern + the pasted instruction (see `project-instructions.md`) is what guarantees the system invokes itself in each tool. Your offline folder is the durable backup and the canonical source the tools re-sync from. In cloud-connector mode there is less to re-sync: the tools read the one live canonical through the connector, so an approved edit to the cloud file is visible everywhere at once (uploaded copies, if any, are fallbacks to refresh).
+This system can live in more than one tool (e.g. a Claude project and a ChatGPT project) at once. Files are identical across tools — when you update one, update the others. The bootstrap pattern + the pasted Project Instructions block (see `chat-tool-settings.md`) is what guarantees the system invokes itself in each tool. Your offline folder is the durable backup and the canonical source the tools re-sync from. In cloud-connector mode there is less to re-sync: the tools read the one live canonical through the connector, so an approved edit to the cloud file is visible everywhere at once (uploaded copies, if any, are fallbacks to refresh).

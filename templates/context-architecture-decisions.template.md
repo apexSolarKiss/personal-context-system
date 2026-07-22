@@ -24,7 +24,7 @@ Placeholders in {{DOUBLE_BRACES}} are filled during setup (by you or the setup i
                           system personal-context-system unless you deliberately choose to.
   {{NAME}}              = your name or handle
   {{DATE}}              = today's date, YYYY-MM-DD
-  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.6.0)
+  {{TEMPLATE_VERSION}}  = the upstream scaffold release tag this was generated from (e.g. v0.7.0)
   {{TEMPLATE_COMMIT}}   = the upstream scaffold commit SHA this was generated from
   {{OWNER_CHOSEN_NAME}} = whatever you decided to call your system
 Lines in [square-bracket italics] are illustrative examples — replace or delete them.
@@ -61,7 +61,7 @@ Durable context lives in three tiers with different reliability properties acros
 
 | Tier | Mechanism | Role |
 |---|---|---|
-| **1. Always-on preferences** | The tool's built-in preferences / memory feature, where it has one. Tool-specific; not all tools have it. | A few things that should apply in *every* conversation: tone, response style, your name, formatting preferences. Small and lean. |
+| **1. Always-on preferences** | The tool's built-in preferences / memory feature, where it has one. Tool-specific; not all tools have it. | A few **behavior-only** things that should apply in *every* conversation: tone, response style, formatting preferences. No life facts — your name and other identity details live in `identity-and-voice.md`, a context file. Small and lean. |
 | **2. Context files** | Markdown files in the tool's project/sources + an offline copy you own. Portable across tools. | The substantive durable content, organized by domain. **This is the load-bearing tier.** |
 | **3. Past-conversation search** | The tool's history-search, where available. Lossy, best-effort. | Backup recall only. Never a primary store. |
 
@@ -71,7 +71,29 @@ Durable context lives in three tiers with different reliability properties acros
 
 *(Advanced: in tools with a dedicated memory API — e.g. Claude's `memory_user_edits` — tier 1 maps onto that feature.)*
 
-**Installing tier 1 (optional).** Where a tool has an always-on custom-instructions/preferences field, you can install a short **behavior-only** block there so it treats you consistently *across the whole tool*, not only inside one project. Derive it from `identity-and-voice.md` (tone, formatting, push-vs-accept, outbound default, and *files win over memory*), keep it **behavior-only — no life facts**, and regenerate it when `identity-and-voice.md` changes rather than maintaining a second source. It is a *derived* paste-in, not a new canonical file.
+**Installing tier 1 (optional).** Where a tool has an always-on custom-instructions/preferences field, you can install a short **behavior-only** block there so it treats you consistently *across the whole tool*, not only inside one project. Keep it **behavior-only — no life facts** (those stay in your files); it is generated from your confirmed `identity-and-voice.md` preferences. But it is **not** an ephemeral re-derivation with no owner: its exact deployed string is owned by `chat-tool-settings.md`, the deployment canonical (see *Chat-tool settings: deployment-string authority* below). Decide a string change on purpose, record it there, then paste — don't silently regenerate it and lose the record of what is actually deployed.
+
+### Chat-tool settings: deployment-string authority
+
+The strings you paste into a tool's settings fields are their own layer, with their own canonical — **`chat-tool-settings.md`**. It exists because three distinct surfaces are easy to silently collapse into one "instructions" field, and because a compressed deployed string drifts from the semantic preferences it came from unless something durably owns it.
+
+**Three deployment surfaces — keep them distinct:**
+
+| Surface | Scope | Canonical block in `chat-tool-settings.md` |
+|---|---|---|
+| ChatGPT Project / Claude Project instructions | project only | *Project Instructions // ChatGPT + Claude Projects* |
+| Claude account instructions | account-wide | *Claude Chat Settings // Instructions* |
+| ChatGPT Personalization | account-wide | *ChatGPT // Personalization // Custom Instructions* |
+
+**Semantic behavior vs. exact deployment string are different authorities.** `identity-and-voice.md` owns *what your preferences are*; `chat-tool-settings.md` owns *the exact compressed strings deployed to each surface*. A change to the former does not silently rewrite the latter.
+
+**The authority chain — do not skip a link:** semantic behavior decision → explicit deployment-string decision → update `chat-tool-settings.md` → preserve the prior version under your system's snapshot conventions → manually paste the block into its named UI field → verify UI-to-canonical parity.
+
+- **Live UI fields are mirrors.** A UI edit is not canonical until it is recorded back into `chat-tool-settings.md`.
+- **Historical settings artifacts are history.** A superseded settings artifact (e.g. an older `project-instructions.md`) is retained as lineage, not rewritten to look current.
+- **Files-over-memory holds for substance.** Durable facts live in your context files; if a tool's memory conflicts with a file, the file wins. Account-level blocks carry **behavior only — no life facts**.
+- **Bootstrap-only connector mode is unchanged.** This settings layer is orthogonal to the connector read path; the four operating modes below still govern how canonicals are read.
+- **Deployment-only, not a standing source.** `chat-tool-settings.md` is generated into your bundle and owns the strings, but it is not mounted as a project context source — `_INDEX.md` lists it under deployment-only.
 
 ### Connector-backed canonicals (optional refinement of tier 2)
 
@@ -130,7 +152,7 @@ Tools differ in how they load project files:
 
 Writing one version per tool would destroy the single-source-of-truth property. The bootstrap pattern solves it instead with three thin components:
 
-1. **A tool-side instruction field** (the "project instructions" / "custom instructions" box) — the one mechanism guaranteed to apply every conversation. ~2 sentences: *"At the start of every conversation, read `_BOOTSTRAP.md` first and follow it."*
+1. **The Project Instructions block**, pasted into the tool's **project** instructions field — or, where a tool has no projects, supplied as chat-local invocation at the start of a chat — is the mechanism that reliably runs the bootstrap every conversation. ~2 sentences: *"At the start of every conversation, read `_BOOTSTRAP.md` first and follow it."* This is **project invocation**, distinct from account-wide personalization (which is behavior-only); do not install project invocation into an account-wide field.
 2. **`_BOOTSTRAP.md`** (a context file) — directs the read order: `_BOOTSTRAP.md` → `_INDEX.md` → topic files. Identical across every tool.
 3. **`_INDEX.md` + topic files** — the substantive system. The bootstrap just guarantees they get read.
 
@@ -190,7 +212,7 @@ When memory, files, and conversation disagree:
 2. Read the relevant topic file before doing substantive work in its domain.
 3. For multi-domain requests, pull every relevant file.
 4. When something changes in a domain, update that file directly + bump its `Last updated` date.
-5. Always-on preferences hold only behavior/tone + the index pointer. New substantive content goes into **files**.
+5. Always-on (account-level) preferences hold **behavior/tone only** — no life facts, no index pointer. Project invocation (read `_BOOTSTRAP.md` → `_INDEX.md`) is owned by the Project Instructions block, and `_BOOTSTRAP.md` owns the exact `_INDEX.md` locator. New substantive content goes into **files**.
 6. **"Remember this" guard.** Any request to remember/save a *substantive* fact (about people, finances, plans, records — not a behavioral instruction) requires reading the relevant file *first*. If the fact is already there, say so and stop. Saving substantive facts to a tool's built-in memory is the exception; the file is the destination.
 
 ---

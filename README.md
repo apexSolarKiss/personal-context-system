@@ -109,7 +109,7 @@ templates/           // the genericized payload (.template suffix kept in the re
   context-architecture-decisions.template.md   // the ADR — why the system is shaped this way
   _BOOTSTRAP.template.md                        // AI-facing entry point (read-first)
   _INDEX.template.md                            // master file map + retrieval protocol
-  project-instructions.template.md              // paste-in for each tool's instructions field
+  chat-tool-settings.template.md                // canonical paste-ins: project + two account-level surfaces
   identity-and-voice.template.md                // the one always-read file (portable "memory")
   domain-file.template.md                       // copyable skeleton for any life domain
   how-to-use-this-system.template.md            // owner-facing operating manual
@@ -130,6 +130,21 @@ The setup prompt is built to keep that line structural, not just a good intentio
 
 ---
 
+## Upgrading an existing system (v0.6.0 → v0.7.0)
+
+Systems generated from v0.6.0 and earlier remain valid — nothing you built is broken, and the account-level split is **opt-in**. Account-wide personalization is never turned on for you automatically; upgrading is a set of choices you make, not a migration done to you. To adopt the new three-surface settings model in an existing system:
+
+1. **Create `chat-tool-settings.md`** in your private folder — or ask any tool that already has your context to *"update my context: add chat-tool-settings"*.
+2. **Carry your existing bootstrap paste-in forward** as the *Project Instructions* block — it is unchanged.
+3. **Generate the two account-level blocks** (Claude account instructions; ChatGPT Personalization) from your confirmed `identity-and-voice.md` preferences — **behavior only, no life facts**. Confirm the exact strings before you treat the file as final.
+4. **Reconcile your existing meta files:** add the deployment-only entry for `chat-tool-settings.md` to your `_INDEX.md`, and add the surface map to your owner manual (`how-to-use-this-system.md`) where appropriate.
+5. **Disposition any bootstrap text already installed account-wide.** v0.6.0 let no-Projects users paste the bootstrap invocation into an account-wide Custom Instructions field. If yours is there: move it to a **project** instructions field or use it chat-locally where those surfaces exist; **remove it from the account-wide behavior field** when you adopt the canonical mapping; retain it globally only through an explicit single-field fallback you mark as noncanonical.
+6. **Install only the surfaces you choose.** Account-level personalization stays optional; the system runs without it — project-mode needs the *Project Instructions* block plus your context sources, no-Projects mode needs supplied context plus chat-local invocation.
+7. **Verify parity** between each pasted settings field and its block.
+8. **Keep any old `project-instructions.md` as history** — don't rewrite it to look current; it is lineage.
+
+---
+
 ## Provenance + License
 
 This scaffold is published by **apex solar kiss** — <https://github.com/apexSolarKiss/personal-context-system>. The name is a generic literal — it names the artifact class, legible on sight; apex solar kiss / ASK origin is carried by the `apexSolarKiss/` owner namespace and the ADR provenance frontmatter, not by the repo name. The repo carries the *method*; your generated system carries your *content* and links back here only by provenance, not by name.
@@ -138,7 +153,7 @@ Generated systems stamp this lineage into their ADR frontmatter (`source-repo`, 
 
 For the rationale and the trust-boundary story behind this scaffold, read [*Crossing the Wall*](https://atomicspacekitten.substack.com/p/crossing-the-wall).
 
-**This release:** `v0.6.0` — bootstrap-only connector mount (minor; the no-connector upload floor and filesystem-direct paths are unchanged and fully supported). In healthy cloud-connector mode the AI project now keeps only `_BOOTSTRAP.md` in the project; the bootstrap carries the exact `_INDEX.md` locator and the index is fetched live, so a project-held index can no longer silently serve stale routing. Generated `_BOOTSTRAP` gains a required `INDEX_CANONICAL_LOCATOR` field; the read order, the `_INDEX` connector protocol, the ADR (four operating modes), the project instructions, the owner manual, and the self-contained `SETUP-PROMPT.md` (with its inlined Template Appendix) are reconciled to match. The `v0.6.0` tag is created on this release's merge commit and `stable` is fast-forwarded to it — which also advances `stable` past the interim commits landed after `v0.5.3` (e.g. the SHARE-KIT wording change), so the update is not literally a one-feature `stable` delta; pin to a version tag explicitly for reproducible use.
+**This release:** `v0.7.0` — chat-tool-settings authority split (minor; backward-compatible — systems generated from v0.6.0 and earlier remain valid, see *Upgrading an existing system* above). The single `project-instructions` paste-in is replaced by a deployment canonical, `chat-tool-settings.md`, that separates four previously-collapsed concerns — semantic behavior, account-level personalization, project-level invocation, and the exact deployed strings — across **three distinct surfaces** (project instructions; Claude account instructions; ChatGPT Personalization). The template `project-instructions.template.md` is renamed to `chat-tool-settings.template.md`; the generated bundle now delivers `chat-tool-settings.md` (all three blocks) as a required file; setup gains an explicit deployment-string confirmation gate before finalizing that file, and account-level personalization is generated but installed only when the user chooses. The ADR (deployment-string authority; the no-durable-owner derivation doctrine retired), the owner manual (surface map), `_INDEX` (deployment-only entry), the setup flow, and the self-contained `SETUP-PROMPT.md` (with its inlined Template Appendix) are reconciled to match. The `v0.7.0` tag is created on this release's merge commit and `stable` is fast-forwarded to it; pin to a version tag explicitly for reproducible use.
 
 ---
 
