@@ -11,6 +11,7 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 - **Naming:** canonical + mounted copies use clean names; copies in transit carry a `YYYY-MM-DD_` prefix, stripped on landing. Full rule in `context-architecture-decisions.md`.
 - **Headers:** every file carries a date stamp. Reference files use `*Last updated: YYYY-MM-DD*`; workstream/archival files use the metadata block.
 - **Source of truth:** if a fact in the tool's built-in memory/preferences conflicts with a fact in a file, **the file wins.**
+- **Artifact roles:** most domain and reference files named here are **context artifacts** — durable files describing what is true. Structural entrypoints such as `_BOOTSTRAP.md`, `_INDEX.md`, and any layout file retain their **structural** role; deployed prompts or settings retain their **carrier** role. Systems that also receive routed **artifacts of intent** or preserve **provenance artifacts** may optionally separate those roles into folders — see `context-architecture-decisions.md`. Flat remains valid.
 
 ---
 

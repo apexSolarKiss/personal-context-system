@@ -465,6 +465,7 @@ Read this after `_BOOTSTRAP.md` directs you here. This file is the master file m
 - **Naming:** canonical + mounted copies use clean names; copies in transit carry a `YYYY-MM-DD_` prefix, stripped on landing. Full rule in `context-architecture-decisions.md`.
 - **Headers:** every file carries a date stamp. Reference files use `*Last updated: YYYY-MM-DD*`; workstream/archival files use the metadata block.
 - **Source of truth:** if a fact in the tool's built-in memory/preferences conflicts with a fact in a file, **the file wins.**
+- **Artifact roles:** most domain and reference files named here are **context artifacts** — durable files describing what is true. Structural entrypoints such as `_BOOTSTRAP.md`, `_INDEX.md`, and any layout file retain their **structural** role; deployed prompts or settings retain their **carrier** role. Systems that also receive routed **artifacts of intent** or preserve **provenance artifacts** may optionally separate those roles into folders — see `context-architecture-decisions.md`. Flat remains valid.
 
 ---
 
@@ -797,6 +798,44 @@ When an artifact is **finalized, locked, or approved**, persist it deliberately 
 
 ---
 
+## Artifact roles (and the optional plane split)
+
+Durable content artifacts in a context system commonly carry one or more of three roles. Structural entrypoints such as the bootstrap, index, and any layout file retain a separate structural role. Naming these roles makes the differences visible; it does not require you to reorganize anything.
+
+| Role | What it is | Example |
+|---|---|---|
+| **Context artifact** | Durable. Describes something true about you or a domain. | `identity-and-voice.md`, `family.md` |
+| **Artifact of intent** | Carries operative direction. It may be **standing and invocable**, or **routed into the system** for action or decision. | a settings carrier, a standing prompt, a handoff memo, a decision request |
+| **Provenance artifact** | A record of what happened. | a saved transcript, a dated snapshot, a closure note |
+
+The roles are always real. **Where you put them is a separate question — and for most systems the answer is "all in one folder," which is fine.**
+
+### The optional plane split
+
+A system that routes a lot of intent — many inbound requests, handoffs from other people or tools — eventually finds that one folder holding all three roles is hard to scan. Some systems then separate the planes, and the two forms of intent separate differently:
+
+```text
+routed artifacts of intent    ->  optional routed-item folder
+standing invocable carriers   ->  optional carrier folder
+```
+
+**This is opt-in, instance-owned, and reversible.** It is not a conformance requirement, not a prerequisite for anything else here, and not a sign that a flat system is doing it wrong.
+
+- **A flat system is conformant.** Most personal systems never route enough intent to earn a split. Staying flat is the default and needs no justification.
+- **Split only when volume earns it** — when scanning one folder has actually become the problem. Adopt it for the folder that hurts; you do not have to adopt it everywhere.
+- **Fixed structural entrypoints stay at root.** Your bootstrap, your index, and any layout file are how the system is *found*. They never move into a plane.
+- **A carrier folder exists only where you actually have standing invocable material.** An empty folder created for symmetry is clutter, not structure.
+- **A state file exists only where a real routed workflow exists.** If nothing routes, nothing needs one.
+- **Lifecycle suffixes are one operator's vocabulary, not this system's default.** Systems running cross-surface handoffs at volume develop suffix grammars to track what has been fed, read, and dispositioned. If you never route anything, you need none of it. Borrow the roles; don't import a grammar you have no use for.
+
+**Quick test:** *do I regularly receive things from outside this system that need acting on?* If no, stay flat.
+
+### Carriers are a role, not a filename
+
+A **carrier** is a file you *invoke* — a prompt, a settings block, a standing instruction — as opposed to one you read for facts. `chat-tool-settings.md` is the current PCS scaffold's worked carrier, and it **is part of the generated bundle** — newly generated systems contain it. The broader carrier *role* is not tied universally to that filename: another context-system architecture may use a different carrier name, or may have no standing carriers at all. What matters is that an invoked file and a read-for-facts file are different things.
+
+---
+
 ## Safety — what not to store here
 
 Assume **anything in these files can be surfaced by any AI tool you upload them to.** Don't store passwords, full account numbers, private keys, or anything you wouldn't want appearing in a generated answer. This system is a *context layer* for helping AI tools understand you — **not** a password manager, legal archive, medical-record vault, or financial ledger. Keep sensitive source records elsewhere and reference them here only at the level of detail actually needed (e.g. "lease renews each spring," not the document; "primary checking at [bank]," not the account number).
@@ -852,6 +891,10 @@ Two roles to keep separate:
 If you use a filesystem-capable tool, setup may write your generated files directly into your private folder. If you use a chat-only tool, the AI generates the files and you save them there yourself.
 
 **Never fill private context inside a scaffold clone, and never commit private content back to the public repo.** This avoids the obvious failure mode: accidentally committing your private life-context into a Git repo.
+
+### Optional: separating routed items from durable context
+
+Most files here are **durable context** — things that are true about you. Two other kinds can show up: **things routed to you** that need acting on, and **records of what happened**. If your system starts receiving enough routed material that one folder gets hard to scan, you can give routed items their own folder. That is entirely optional and reversible — **a flat system is completely valid**, and most stay that way. Your bootstrap, index, and any layout file stay at the top level regardless. Details in `context-architecture-decisions.md`.
 
 ### Optional: cloud-connector mode (Dropbox / Google Drive)
 
