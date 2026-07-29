@@ -38,6 +38,10 @@ If you use a filesystem-capable tool, setup may write your generated files direc
 
 **Never fill private context inside a scaffold clone, and never commit private content back to the public repo.** This avoids the obvious failure mode: accidentally committing your private life-context into a Git repo.
 
+### Optional: separating routed items from durable context
+
+Most files here are **durable context** — things that are true about you. Two other kinds can show up: **things routed to you** that need acting on, and **records of what happened**. If your system starts receiving enough routed material that one folder gets hard to scan, you can give routed items their own folder. That is entirely optional and reversible — **a flat system is completely valid**, and most stay that way. Your bootstrap, index, and any layout file stay at the top level regardless. Details in `context-architecture-decisions.md`.
+
 ### Optional: cloud-connector mode (Dropbox / Google Drive)
 
 If your AI tool can connect to your cloud storage, you have a cleaner option than uploading copies into every project. Keep the real files — including `_INDEX.md` — in a Dropbox or Google Drive folder you own, and give each AI project only `_BOOTSTRAP.md`, which carries the exact `_INDEX.md` locator. The AI fetches the index live, then the canonicals it names, so your files never go stale inside a project — keep only the bootstrap in the project; fetch the index and canonicals live.

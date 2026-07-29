@@ -248,6 +248,44 @@ When an artifact is **finalized, locked, or approved**, persist it deliberately 
 
 ---
 
+## Artifact roles (and the optional plane split)
+
+Files in a context system do three different jobs. Naming them makes the difference visible; it does not require you to reorganize anything.
+
+| Role | What it is | Example |
+|---|---|---|
+| **Context artifact** | Durable. Describes something true about you or a domain. | `identity-and-voice.md`, `family.md` |
+| **Artifact of intent** | Carries operative direction. It may be **standing and invocable**, or **routed into the system** for action or decision. | a settings carrier, a standing prompt, a handoff memo, a decision request |
+| **Provenance artifact** | A record of what happened. | a saved transcript, a dated snapshot, a closure note |
+
+The roles are always real. **Where you put them is a separate question — and for most systems the answer is "all in one folder," which is fine.**
+
+### The optional plane split
+
+A system that routes a lot of intent — many inbound requests, handoffs from other people or tools — eventually finds that one folder holding all three roles is hard to scan. Some systems then separate the planes, and the two forms of intent separate differently:
+
+```text
+routed artifacts of intent    ->  optional routed-item folder
+standing invocable carriers   ->  optional carrier folder
+```
+
+**This is opt-in, instance-owned, and reversible.** It is not a conformance requirement, not a prerequisite for anything else here, and not a sign that a flat system is doing it wrong.
+
+- **A flat system is conformant.** Most personal systems never route enough intent to earn a split. Staying flat is the default and needs no justification.
+- **Split only when volume earns it** — when scanning one folder has actually become the problem. Adopt it for the folder that hurts; you do not have to adopt it everywhere.
+- **Fixed structural entrypoints stay at root.** Your bootstrap, your index, and any layout file are how the system is *found*. They never move into a plane.
+- **A carrier folder exists only where you actually have standing invocable material.** An empty folder created for symmetry is clutter, not structure.
+- **A state file exists only where a real routed workflow exists.** If nothing routes, nothing needs one.
+- **Lifecycle suffixes are one operator's vocabulary, not this system's default.** Systems running cross-surface handoffs at volume develop suffix grammars to track what has been fed, read, and dispositioned. If you never route anything, you need none of it. Borrow the roles; don't import a grammar you have no use for.
+
+**Quick test:** *do I regularly receive things from outside this system that need acting on?* If no, stay flat.
+
+### Carriers are a role, not a filename
+
+A **carrier** is a file you *invoke* — a prompt, a settings block, a standing instruction — as opposed to one you read for facts. `chat-tool-settings.md` is the current PCS scaffold's worked carrier, and it **is part of the generated bundle** — newly generated systems contain it. The broader carrier *role* is not tied universally to that filename: another context-system architecture may use a different carrier name, or may have no standing carriers at all. What matters is that an invoked file and a read-for-facts file are different things.
+
+---
+
 ## Safety — what not to store here
 
 Assume **anything in these files can be surfaced by any AI tool you upload them to.** Don't store passwords, full account numbers, private keys, or anything you wouldn't want appearing in a generated answer. This system is a *context layer* for helping AI tools understand you — **not** a password manager, legal archive, medical-record vault, or financial ledger. Keep sensitive source records elsewhere and reference them here only at the level of detail actually needed (e.g. "lease renews each spring," not the document; "primary checking at [bank]," not the account number).
