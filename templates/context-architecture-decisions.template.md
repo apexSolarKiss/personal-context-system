@@ -250,7 +250,7 @@ When an artifact is **finalized, locked, or approved**, persist it deliberately 
 
 ## Artifact roles (and the optional plane split)
 
-Files in a context system do three different jobs. Naming them makes the difference visible; it does not require you to reorganize anything.
+Durable content artifacts in a context system commonly carry one or more of three roles. Structural entrypoints such as the bootstrap, index, and any layout file retain a separate structural role. Naming these roles makes the differences visible; it does not require you to reorganize anything.
 
 | Role | What it is | Example |
 |---|---|---|
