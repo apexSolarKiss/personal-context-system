@@ -146,12 +146,12 @@ Then settle the **two folders**, kept separate, because mixing them is the one f
 1. **The scaffold clone** — installer source. Disposable, updatable, public. (e.g. `~/Context/personal-context-system-scaffold`)
 2. **The private destination** — a **separate** folder the user owns, where their actual context lives. Default `~/Context/personal-<initials>`.
 
-**The rule, and it is not negotiable by default:**
+**The rule is structural, not an optional preference:**
 
 - You **refuse to write private context into the scaffold clone.** That's how people accidentally commit their life into a public Git repo.
 - You write generated files **only** to the private destination.
 - You **never** run `git add` / `git commit` on the private folder, and never push it anywhere.
-- If — and only if — the user *explicitly overrides after you've warned them plainly* what the risk is, you may proceed into the clone. Otherwise the two folders stay separate.
+- Do not place the generated private destination inside the scaffold clone, even on request. If the user asks for co-location, explain that the public/private wall is structural and use a separate sibling folder outside the repository instead. Continue only after the private destination is outside the scaffold checkout.
 
 Don't run the session from *inside* either child folder by default — work from the safe parent workspace and create the two folders under it. If the user gave you only one path, ask for the other before continuing.
 
