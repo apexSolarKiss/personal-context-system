@@ -137,7 +137,7 @@ You can write to disk, so *you* handle the mechanics — the user just confirms.
 - **Not in a clone?** The user doesn't need to have cloned anything. Make sure you're in a **safe parent workspace** — a folder where it's fine to create new folders, *not* the user's future private folder and *not* some repo you shouldn't touch — then offer to clone the scaffold yourself:
   ```bash
   mkdir -p ~/Context
-  git clone --branch v0.7.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
+  git clone --branch v0.8.0 --depth 1 https://github.com/apexSolarKiss/personal-context-system.git ~/Context/personal-context-system-scaffold
   ```
   (Adjust the parent path to wherever they want.) Or skip the clone entirely: the **Template Appendix** in this prompt is equivalent to it — you don't strictly need the repo at all.
 
@@ -228,11 +228,11 @@ Generate the system using the templates in the **Template Appendix** below (or f
 - **Stamp the ADR provenance frontmatter** in `context-architecture-decisions.md`:
   - `local-system-name:` their system name
   - `owner-chosen-name:` whatever they chose to call it
-  - `template-version:` the scaffold release tag you generated from (e.g. `v0.7.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
+  - `template-version:` the scaffold release tag you generated from (e.g. `v0.8.0` for this release; if you fetched via the `stable` alias or a paste and can't confirm the exact tag, follow the provenance-honesty note below)
   - `template-commit:` the scaffold commit SHA you generated from
   - `generated:` today's date
   - leave `source-repo: https://github.com/apexSolarKiss/personal-context-system` as-is — that's the lineage bridge.
-  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.7.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
+  - **Provenance honesty:** stamp `template-version` / `template-commit` with the *actual* version of the artifact you're generating from. Running from a clone, that's the checked-out tag and commit. Running from a pasted or uploaded `SETUP-PROMPT.md` with no repo access, you may stamp the tag the file *self-reports*, but **mark it as self-reported and unverified** (e.g. `v0.8.0 (self-reported; not independently verified)`) and leave `template-commit` as a clearly-marked `UNKNOWN — fill after confirming against the upstream tag`. Never invent a tag or SHA: a wrong-but-confident provenance stamp is worse than an honest gap.
 
 **Deployment-string confirmation gate — before you treat `chat-tool-settings.md` as final or begin any install.** The three blocks are *deployment strings*, distinct from the semantic preferences they came from, so the user confirms them explicitly before they become canonical:
 
