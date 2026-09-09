@@ -737,7 +737,7 @@ If you let a capability-bearing tool (a coding agent, a builder, anything that c
   ...private files... (root)   <- never granted
 ```
 
-A grant scoped to `inheritable/` exposes zero private files because they live one level up, outside the grant. This replaces a behavioral wall (a tool *choosing* not to read private files) with a structural one (it *cannot* reach them). The grant boundary equals the content boundary.
+A grant scoped to `inheritable/` exposes zero private files because they live one level up, outside the grant. Folder separation defines that boundary and makes it auditable. It replaces a behavioral wall (a tool *choosing* not to read private files) with a structural one — the tool *cannot* reach them — only where the tool is actually confined to that grant. Where it is, the grant boundary equals the content boundary.
 
 > Note: this also means **anything published more widely than that trusted tool** (e.g. a public repo) must be a *genericized template*, not your live files — even inheritable files can carry personal specifics in their examples. Sanitize before publishing.
 >
